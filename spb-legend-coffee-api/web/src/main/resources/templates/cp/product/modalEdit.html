@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<th:block th:fragment="modalEdit">
+    <!-- Modal -->
+    <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fw-bold" id="modalEditLabel">Chỉnh sửa sản phẩm</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="frmEdit">
+                        <div class="form-group">
+
+                            <div class="frm-alert-danger hide">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-8">
+
+                                    <input type="text" id="idEdit" name="idEdit" hidden>
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label for="titleEdit">Tên sản phẩm(*)</label>
+                                            <input class="form-control" type="text"
+                                                   placeholder="Nhập tên sản phẩm"
+                                                   id="titleEdit" name="titleEdit">
+                                        </div>
+                                        <div class="col-6">
+
+                                            <label for="categoryEdit">Loại sản phẩm(*)</label>
+                                            <select class="custom-select"
+                                                    id="categoryEdit" name="categoryEdit">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <label for="summaryEdit" class="mt-2">Tóm tắt sản phẩm</label>
+                                    <textarea class="form-control" rows="2"
+                                              placeholder="Nhập tóm tắt..."
+                                              id="summaryEdit" name="summaryEdit"></textarea>
+
+                                    <label for="descriptionEdit" class="mt-2">Mô tả(*)</label>
+                                    <textarea class="form-control" rows="3"
+                                              placeholder="Nhập mô tả sản phẩm..."
+                                              id="descriptionEdit" name="descriptionEdit"></textarea>
+
+                                </div>
+                                <div class="col-4">
+
+                                    <img class='mt-2 col-sm-12' role="button" style="cursor: pointer"
+                                         src='/assets/img/product/default_product_image.png'
+                                         alt="Hình ảnh sản phẩm"
+                                         id="imageShowEdit"/>
+                                    <input type="file" accept="image/*" id="fileUploadImageEdit" class="d-none"/>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="selectSizeEdit">Kích cỡ(*)</label>
+                            <div class="row mb-2">
+                                <div class="col-6">
+                                    <select class="custom-select" id="selectSizeEdit">
+                                        <option value="0" selected>Không</option>
+                                        <option value="1">Có</option>
+                                    </select>
+                                </div>
+                                <div class="input-group col-6" id="divNoSize">
+                                    <input type="number" class="form-control"
+                                           placeholder="Nhập giá sản phẩm"
+                                           id="noSizeEdit" name="noSizeEdit">
+                                </div>
+                            </div>
+
+                            <div class="row hide" id="divAllSize">
+                                <div class="input-group mb-3 col-4">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span>S</span>
+                                        </div>
+                                    </div>
+                                    <input type="number" class="form-control"
+                                           aria-label="Text input with checkbox"
+                                           placeholder="Nhập giá..."
+                                           id="sSizeEdit" name="sSizeEdit">
+                                </div>
+
+                                <div class="input-group mb-3 col-4">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span>M</span>
+                                        </div>
+                                    </div>
+                                    <input type="number" class="form-control"
+                                           aria-label="Text input with checkbox"
+                                           placeholder="Nhập giá..."
+                                           id="mSizeEdit" name="mSizeEdit">
+                                </div>
+                                <div class="input-group mb-3 col-4">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span>L</span>
+                                        </div>
+                                    </div>
+                                    <input type="number" class="form-control"
+                                           aria-label="Text input with checkbox"
+                                           placeholder="Nhập giá..."
+                                           id="lSizeEdit" name="lSizeEdit">
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark btn-lg" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary btn-lg"
+                            id="btnEdit">Chỉnh sửa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+
+    <th:block th:replace="/cp/layout/header :: header-utils"/>
+    <th:block th:replace="/cp/layout/header :: header-logo"/>
+    <th:block th:replace="/cp/layout/header :: header-perfect-scrollbar"/>
+    <th:block th:replace="/cp/layout/header :: header-material-design"/>
+    <th:block th:replace="/cp/layout/header :: header-app-css"/>
+    <th:block th:replace="/cp/layout/header :: header-app-style"/>
+    <th:block th:replace="/cp/layout/header :: header-loading"/>
+    <th:block th:replace="/cp/layout/header :: header-fontawesome"/>
+    <th:block th:replace="/cp/layout/header :: header-sweetalert2"/>
+    <th:block th:replace="/cp/layout/header :: header-izitoast"/>
+
+    <title>Legend Coffee</title>
+
+</head>
+<body>
+
+<div class="be-wrapper">
+
+    <th:block th:replace="/cp/layout/top-header :: top-header"></th:block>
+
+    <th:block th:replace="/cp/layout/left-sidebar :: left-sidebar"></th:block>
+
+    <div class="loader hide">
+        <div id="loading"></div>
+    </div>
+
+    <div class="be-content">
+        <div class="page-head">
+            <nav aria-label="breadcrumb" role="navigation">
+                <ol class="breadcrumb page-head-nav">
+                    <li class="breadcrumb-item"><a href="/cp">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="/cp/products">Sản phẩm</a></li>
+                    <li class="breadcrumb-item active text-primary">Xem sản phẩm</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content container-fluid">
+            <div class="card card-border-color card-border-color-primary">
+                <div class="card-header text-uppercase">
+                    <h2 class="ml-5" style="font-weight: bold" id="titleProductView"></h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <img id="imageProductView" class='mt-2 col-sm-12' role="button" style="cursor: pointer"
+                             src=""
+                             alt="Hình ảnh sản phẩm"/>
+                    </div>
+                    <div class="col-lg-8">
+                        <span id="descriptionProductView"
+                              style="font-size: 20px; padding-right: 20px; font-style: italic"></span>
+                        <hr>
+                        <div class="row mt-2 ml-1 ">
+                            <span class="mr-2" style="font-size: 18px;">Loại: </span>
+                            <span id="categoryProductView"
+                                  style="font-size: 18px; padding-right: 10px; font-weight: bold"></span>
+                        </div>
+                        <hr>
+                        <div class="row mt-2 ml-1">
+                            <span style="font-size: 18px;">Giá: </span>
+                            <table id="tbSizeProductView" class="col-md-12 mt-2 mr-2">
+                                <tbody>
+
+                                </tbody>
+
+                            </table>
+                            <a role="button" href="/cp/products" class="btn btn-primary btn-lg mt-7"><i
+                                    class="fa-solid fa-arrow-left"></i> Trở về</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="cp/layout/script :: script-jquery"/>
+<th:block th:replace="cp/layout/script :: script-jquery-validate"/>
+<th:block th:replace="cp/layout/script :: script-perfect-scrollbar"/>
+<th:block th:replace="cp/layout/script :: script-boostrap"/>
+<th:block th:replace="cp/layout/script :: script-app"/>
+<th:block th:replace="cp/layout/script :: script-fontawesome"/>
+<th:block th:replace="cp/layout/script :: script-sweetalert2"/>
+<th:block th:replace="cp/layout/script :: script-izitoast"/>
+<th:block th:replace="cp/layout/script :: script-appUtils"/>
+<script>
+
+    const page = {
+        urls: {
+            getProductById: AppUtils.PRODUCT_API,
+        },
+        elements: {},
+        commands: {},
+        initializeEventControl: {}
+    }
+
+    page.elements.loader = $(".loader");
+
+    page.elements.titleProductView = $("#titleProductView");
+    page.elements.imageProductView = $("#imageProductView");
+    page.elements.descriptionProductView = $("#descriptionProductView");
+    page.elements.categoryProductView = $("#categoryProductView");
+    page.elements.tbSizeProductViewBody = $("#tbSizeProductView tbody");
+
+    page.commands.getProductById = () => {
+        page.commands.showLoading();
+        let tempArray = location.href.split("/");
+        let productId = tempArray.at(-1);
+        return $.ajax({
+
+            type: "GET",
+            url: page.urls.getProductById + "/" + productId
+
+        }).done((data) => {
+
+            page.elements.titleProductView.text(data.title);
+            page.elements.imageProductView.attr("src", data.productImage.fileUrl);
+            page.elements.descriptionProductView.text(data.description);
+            page.elements.categoryProductView.text(data.category.title);
+
+
+            let arraySizes = [];
+
+            if (data.sizes.NO) arraySizes.push({name: data.sizes.NO.name, price: data.sizes.NO.price});
+            if (data.sizes.S) arraySizes.push({name: data.sizes.S.name, price: data.sizes.S.price});
+            if (data.sizes.M) arraySizes.push({name: data.sizes.M.name, price: data.sizes.M.price});
+            if (data.sizes.L) arraySizes.push({name: data.sizes.L.name, price: data.sizes.L.price});
+            arraySizes.forEach(item => {
+                page.elements.tbSizeProductViewBody.append(
+                    `
+                     <tr>
+                        <td>
+                            <div class="size-view">${item.name}</div>
+                            <span style="font-size: 22px; font-style: italic">${AppUtils.formatCurrency(item.price)}</span>
+                        </td>
+                    </tr>
+                    `
+                )
+            })
+
+        })
+            .fail((jqXHR) => {
+                let errors = jqXHR.responseJSON;
+                if (errors) {
+                    let str = "";
+                    $.each(errors, (k, v) => {
+                        str += `
+                            ${v}
+                        `;
+                    })
+                    AppUtils.SweetAlert.showErrorAlert(str);
+                }
+            })
+            .always(function () {
+                page.commands.closeLoading();
+            })
+    }
+
+
+    page.commands.showLoading = () => {
+        page.elements.loader.removeClass("hide");
+
+    }
+
+    page.commands.closeLoading = () => {
+        page.elements.loader.addClass("hide");
+
+    }
+
+    page.commands.loadData = () => {
+        page.commands.getProductById();
+    }
+
+    page.initializeEventControl = () => {
+        App.init();
+    }
+
+    $(() => {
+
+        page.commands.loadData();
+        page.initializeEventControl();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <th:block th:replace="/cp/layout/header :: header-utils"/>
+    <th:block th:replace="/cp/layout/header :: header-logo"/>
+    <th:block th:replace="/cp/layout/header :: header-boostrap-v5"/>
+    <th:block th:replace="/cp/layout/header :: header-fontawesome"/>
+    <th:block th:replace="/cp/layout/header :: header-sweetalert2"/>
+    <th:block th:replace="/cp/layout/header :: header-izitoast"/>
+    <th:block th:replace="/cp/layout/header :: header-app-style"/>
+    <th:block th:replace="/cp/layout/header :: header-login-staff"/>
+    <th:block th:replace="/cp/layout/header :: header-loading"/>
+
+    <title>Legend Coffee</title>
+</head>
+
+<body>
+<div class="loader hide">
+    <div id="loading"></div>
+</div>
+<div class="login-card-container">
+    <div class="login-card">
+        <div class="login-card-logo">
+            <img src="/assets/img/logo-black.png"
+                 alt="logo">
+        </div>
+        <div class="login-card-header">
+            <h1>Đăng nhập</h1>
+            <div>Vui lòng đăng nhập để sử dụng</div>
+        </div>
+        <form id="frmLogin" class="login-card-form">
+            <div class="form-item">
+                <span class="form-item-icon"><i class="fa-solid fa-user-pen"></i></span>
+                <input id="emailLogin" name="emailLogin" type="email" placeholder="Nhập email" required autofocus>
+            </div>
+            <div class="form-item">
+                <span class="form-item-icon"><i class="fa-solid fa-key"></i></span>
+                <input id="passwordLogin" name="passwordLogin" type="password" placeholder="Nhập mật khẩu" required>
+                <span class="show-password" onclick="showPassword()"><i class="fa-solid fa-eye"></i></span>
+            </div>
+            <div class="form-item-other">
+                <div class="checkbox">
+                    <input type="checkbox" id="rememberMeCheckBox">
+                    <label for="rememberMeCheckBox">Nhớ tài khoản</label>
+                </div>
+                <a href="/cp/forget-password">Quên mật khẩu</a>
+            </div>
+            <button id="btnLogin" type="button">Đăng nhập</button>
+        </form>
+        <!--        <div class="login-card-footer">-->
+        <!--            Bạn chưa có tài khoản? <a href="/register">Tạo tài khoản mới</a>.-->
+        <!--        </div>-->
+    </div>
+</div>
+</body>
+
+<th:block th:replace="cp/layout/script :: script-jquery"/>
+<th:block th:replace="cp/layout/script :: script-jquery-validate"/>
+<th:block th:replace="cp/layout/script :: script-boostrap-v5"/>
+<th:block th:replace="cp/layout/script :: script-fontawesome"/>
+<th:block th:replace="cp/layout/script :: script-sweetalert2"/>
+<th:block th:replace="cp/layout/script :: script-izitoast"/>
+<th:block th:replace="cp/layout/script :: script-app"/>
+<th:block th:replace="cp/layout/script :: script-appUtils"/>
+
+<script>
+    const page = {
+        urls: {
+            login: AppUtils.AUTH_URL + "/login",
+        },
+        elements: {},
+        commands: {},
+        initializeEventControl: {}
+    }
+
+    page.elements.loader = $(".loader");
+
+    page.elements.frmLogin = $("#frmLogin");
+    page.elements.emailLogin = $("#emailLogin");
+    page.elements.passwordLogin = $("#passwordLogin");
+    page.elements.btnLogin = $("#btnLogin");
+
+    page.commands.login = () => {
+        page.commands.showLoading();
+        let user = {
+            username: page.elements.emailLogin.val(),
+            password: page.elements.passwordLogin.val()
+        }
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            type: "POST",
+            url: page.urls.login,
+            data: JSON.stringify(user)
+        }).done((resp) => {
+            let role = resp.roles[0].authority;
+            AppUtils.SweetAlert.redirectPage("Đăng nhập thành công.", "<b></b>", 1000);
+
+            setTimeout(function () {
+                window.location.href = "/cp";
+            }, 1000);
+
+            if (role === "CUSTOMER") {
+                // setTimeout(function () {
+                //     window.location.href = "/cp";
+                // }, 1000);
+
+                AppUtils.IziToast.showErrorAlertLeft("Chưa có trang khách hàng")
+            }
+
+        }).fail(function (jqXHR) {
+            console.log(jqXHR.responseJSON)
+            if (jqXHR.responseJSON) {
+                if (jqXHR.responseJSON.message) {
+                    AppUtils.IziToast.showErrorAlertLeft(jqXHR.responseJSON.message);
+                } else {
+                    $.each(jqXHR.responseJSON, function (key, value) {
+                        AppUtils.IziToast.showErrorAlertLeft(value);
+                    });
+                }
+            } else {
+                AppUtils.IziToast.showErrorAlertLeft("Email hoặc mật khẩu không đúng. Vui lòng kiểm tra lại!");
+            }
+        })
+            .always(function () {
+                page.commands.closeLoading();
+            })
+    }
+
+    function showPassword() {
+        let password = document.querySelector("#passwordLogin");
+        password.type === "password" ? password.type = "text" : password.type = "password";
+
+    }
+
+    page.commands.showLoading = () => {
+        page.elements.loader.removeClass("hide");
+
+    }
+
+    page.commands.closeLoading = () => {
+        page.elements.loader.addClass("hide");
+
+    }
+
+    page.commands.loadData = () => {
+    }
+
+    page.initializeEventControl = () => {
+        page.elements.btnLogin.on("click", () => {
+            page.commands.login();
+        })
+    }
+
+    $(() => {
+        page.commands.loadData();
+        page.initializeEventControl();
+    });
+</script>
+</html>

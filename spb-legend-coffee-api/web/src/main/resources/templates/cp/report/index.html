@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+
+    <th:block th:replace="/cp/layout/header :: header-utils"/>
+    <th:block th:replace="/cp/layout/header :: header-logo"/>
+    <th:block th:replace="/cp/layout/header :: header-perfect-scrollbar"/>
+    <th:block th:replace="/cp/layout/header :: header-material-design"/>
+    <th:block th:replace="/cp/layout/header :: header-app-css"/>
+    <th:block th:replace="/cp/layout/header :: header-app-style"/>
+    <th:block th:replace="/cp/layout/header :: header-reprot-css"/>
+    <th:block th:replace="/cp/layout/header :: header-loading"/>
+    <th:block th:replace="/cp/layout/header :: header-fontawesome"/>
+    <th:block th:replace="/cp/layout/header :: header-sweetalert2"/>
+    <th:block th:replace="/cp/layout/header :: header-izitoast"/>
+
+    <title>Legend Coffee</title>
+
+</head>
+
+<body>
+
+<div class="be-wrapper be-fixed-sidebar">
+
+    <th:block th:replace="/cp/layout/top-header :: top-header"></th:block>
+
+    <th:block th:replace="/cp/layout/left-sidebar :: left-sidebar"></th:block>
+
+    <div class="loader hide">
+        <div id="loading"></div>
+    </div>
+
+    <div class="be-content">
+        <div class="main-content container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-6 col-xl-4">
+                    <div class="widget widget-tile">
+                        <div class="chart sparkline" id="spark1"></div>
+                        <div class="data-info">
+                            <div class="desc">Doanh thu trong ngày</div>
+                            <div class="value">
+                                <span class="indicator indicator-equal mdi mdi-chevron-right"></span>
+                                <span id="totalOfDay" class="number">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 col-xl-4">
+                    <div class="widget widget-tile">
+                        <div class="chart sparkline" id="spark2"></div>
+                        <div class="data-info">
+                            <div class="desc">Hóa đơn trong ngày</div>
+                            <div class="value">
+                                <span class="indicator indicator-positive mdi mdi-chevron-up"></span>
+                                <span id="countOrderCurrentDay" class="number">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 col-xl-4">
+                    <div class="widget widget-tile">
+                        <div class="chart sparkline" id="spark3"></div>
+                        <div class="data-info">
+                            <div class="desc">Doanh thu trong tháng</div>
+                            <div class="value">
+                                <span class="indicator indicator-positive mdi mdi-chevron-up"></span>
+                                <span id="reportCurrentMonth" class="number">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-6 col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row d-flex justify-content-between">
+                                <div class="ml-3 title-table">TOP 5 SẢN PHẨM BÁN CHẠY</div>
+
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table id="tbTop5Product" class="table table-striped table-hover">
+                                <thead>
+                                <tr>
+                                    <th style="width:5%;" class="text-center">#</th>
+                                    <th style="width:20%;" class="text-center">Ảnh</th>
+                                    <th style="width:20%;" class="text-center">Tên sản phẩm</th>
+                                    <th style="width:15%;" class="text-center">Kích cỡ</th>
+                                    <th style="width:20%;" class="text-center">Số lượng bán ra</th>
+                                    <th style="width:20%;" class="text-center">Doanh thu</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-6">
+
+                    <div id="top10ProductChart" style="width:100%;max-width:500px; min-width: 400px"></div>
+
+                </div>
+
+                <div class="col-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row d-flex justify-content-between">
+                                <div class="ml-3 title-table">DOANH THU TỪNG THÁNG THEO NĂM</div>
+                                <div class="col-3 mr-3 d-flex">
+                                    <select class="form-control mr-1" id="yearReport" name="yearReport">
+
+                                    </select>
+                                    <button id="btnShowChartMonthOfYear" class='btn btn-primary btn-lg'>Xem</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="reportByYearChart" style="width:100%; max-width:1000px; height:350px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row d-flex justify-content-between">
+                                <div class="ml-3 title-table">DOANH THU THEO KHOẢNG NGÀY</div>
+                                <div class="col-12 mt-2 d-flex">
+                                    <div class="mr-2 form-label my-auto">
+                                        Từ ngày
+                                    </div>
+                                    <div class="ml-2 mr-2">
+                                        <input type="date" min="2020-01-01" max="" class="form-control"
+                                               id='dateStartReport'>
+                                    </div>
+                                    <div class="mr-2 form-label my-auto">
+                                        đến ngày
+                                    </div>
+                                    <div class="mr-2">
+                                        <input type="date" min="2020-01-01" max="" class="form-control"
+                                               id='dateEndReport'>
+                                    </div>
+                                    <button id="btnShowChartReportDayToDay" class="btn btn-primary btn-lg">Xem</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="chartDayToDay" style="width:100%"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="/cp/layout/right-sidebar :: right-sidebar"></th:block>
+
+</div>
+<th:block th:replace="/cp/layout/script :: script-jquery"></th:block>
+<th:block th:replace="/cp/layout/script :: script-perfect-scrollbar"></th:block>
+<th:block th:replace="/cp/layout/script :: script-boostrap"></th:block>
+<th:block th:replace="/cp/layout/script :: script-app"></th:block>
+<th:block th:replace="/cp/layout/script :: script-jquery-sparkline"></th:block>
+<th:block th:replace="/cp/layout/script :: script-count-up"></th:block>
+<th:block th:replace="/cp/layout/script :: script-izitoast"></th:block>
+<th:block th:replace="/cp/layout/script :: script-sweetalert2"></th:block>
+<th:block th:replace="/cp/layout/script :: script-appUtils"></th:block>
+<th:block th:replace="/cp/layout/script :: script-chartjs"></th:block>
+<th:block th:replace="/cp/layout/script :: script-plotly"></th:block>
+
+<script type="text/javascript">
+
+    const page = {
+        urls: {
+            getReportByYear: AppUtils.REPORT_API,
+            getReportOfDay: AppUtils.REPORT_API,
+            getReportDayToDay: AppUtils.REPORT_API,
+            countOrderCurrentDay: AppUtils.ORDER_API,
+            getReportCurrentMonth: AppUtils.REPORT_API,
+            getTop5Product: AppUtils.REPORT_API
+        },
+        elements: {},
+        commands: {},
+        initializeEventControl: {}
+    }
+
+    page.elements.loader = $(".loader");
+    page.elements.yearReport = $("#yearReport");
+    page.elements.btnShowChartMonthOfYear = $("#btnShowChartMonthOfYear");
+    page.elements.btnShowChartReportDayToDay = $("#btnShowChartReportDayToDay");
+    page.elements.totalOfDay = $("#totalOfDay");
+    page.elements.countOrderCurrentDay = $("#countOrderCurrentDay");
+    page.elements.reportCurrentMonth = $("#reportCurrentMonth");
+
+    page.elements.dateStartReport = $("#dateStartReport");
+    page.elements.dateEndReport = $("#dateEndReport");
+
+    page.elements.tbTop5Product = $("#tbTop5Product");
+    page.elements.tbTop5ProductBody = $("#tbTop5Product tbody");
+
+
+    page.commands.countOrderCurrentDay = () => {
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.countOrderCurrentDay + "/count-order-current-day"
+        })
+            .done((data) => {
+                if (data != null) {
+                    page.elements.countOrderCurrentDay.text(data);
+                } else {
+                    page.elements.countOrderCurrentDay.text(0)
+                }
+            })
+            .fail((error) => {
+                console.log(error);
+            })
+    }
+
+    page.commands.renderYear = () => {
+        let year = AppUtils.getCurrentYear();
+        let arrayYear = [year - 2, year - 1, year];
+
+        arrayYear.map(item => {
+            let str = `<option value="${item}">Năm ${item}</option>`;
+            page.elements.yearReport.prepend(str);
+        });
+        page.elements.yearReport.val(AppUtils.getCurrentYear());
+    }
+
+    page.commands.renderReportOfDay = () => {
+
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getReportByYear + "/day/" + AppUtils.getCurrentDay()
+        })
+            .done((data) => {
+                if (data != null) {
+                    page.elements.totalOfDay.text(AppUtils.formatCurrency(data));
+                } else {
+                    page.elements.totalOfDay.text(0);
+                }
+            })
+            .fail((error) => {
+                console.log(error);
+            })
+    }
+
+    page.commands.renderReportCurrentMonth = () => {
+
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getReportCurrentMonth + "/month/current-month"
+        })
+            .done((data) => {
+                if (data != null) {
+                    page.elements.reportCurrentMonth.text(AppUtils.formatCurrency(data));
+                }
+            })
+            .fail((error) => {
+                console.log(error);
+            })
+    }
+
+    page.commands.renderTop5Product = () => {
+        page.commands.showLoading();
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getTop5Product + "/product/top5"
+        })
+            .done((data) => {
+                let xArray = [];
+                let yArray = [];
+                $.each(data, (i, item) => {
+                    page.elements.tbTop5ProductBody.append(page.commands.renderReportProduct(i + 1, item));
+                    xArray.push(item.productName);
+                    yArray.push(item.quantity);
+                });
+                AppUtils.drawPieChart(xArray, yArray, "top10ProductChart");
+            })
+
+            .fail((error) => {
+                console.log(error);
+            })
+            .always(function () {
+                page.commands.closeLoading();
+            })
+    }
+
+    page.commands.renderReportProduct = (index, item) => {
+        let image_thumbnail = AppUtils.BASE_URL_CLOUD_IMAGE + "/" + AppUtils.SCALE_IMAGE_W60_H50_Q100 + "/" + item.fileFolder + "/" + item.fileName;
+        let str = `<tr>
+                    <td class="text-center">${index}</td>
+                    <td class="text-center">
+                    <img src="${image_thumbnail}" alt="Ảnh sp"/>
+                    </td>
+                    <td class="text-center">
+                      <a href="/cp/products/${item.id}">${item.productName}</a>
+                    </td>
+                    <td class="text-center">${item.size}</td>
+                    <td class="text-center">${item.quantity}</td>
+                    <td class="text-center">${AppUtils.formatCurrency(item.amount)}</td>
+                </tr>`
+        return str;
+    }
+
+    page.commands.showReportByYear = (year) => {
+        page.commands.showLoading();
+
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getReportByYear + "/year/" + year
+        })
+            .done((data) => {
+                if (data === undefined) AppUtils.IziToast.showErrorAlertLeft(`Năm ${year} hiện chưa có doanh thu!`)
+                else {
+                    let xValues = [];
+                    let yValues = [];
+                    data.map(item => {
+                        xValues.push("Tháng " + item.month);
+                        yValues.push(item.totalAmount);
+                    });
+                    AppUtils.drawBarsChart(xValues, yValues, "reportByYearChart");
+                }
+            })
+            .fail((error) => {
+                console.log(error);
+            }).always(function () {
+            page.commands.closeLoading();
+        })
+    }
+
+    page.commands.handleShowReportDayToDay = () => {
+
+        page.commands.showLoading();
+        let startDay = page.elements.dateStartReport.val();
+        let endDay = page.elements.dateEndReport.val();
+
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getReportDayToDay + "/day/" + startDay + "/" + endDay
+        })
+            .done((data) => {
+                if (data === undefined || data === null || data === "") AppUtils.IziToast.showErrorAlertLeft(`Không có dữ liệu`)
+                else {
+                    let xValues = [];
+                    let yValues = [];
+                    data.map(item => {
+                        xValues.push(item.totalAmount);
+                        yValues.push(item.day + " ");
+                    });
+                    AppUtils.drawPlotChart(xValues, yValues, "chartDayToDay");
+                }
+
+            })
+            .fail((error) => {
+                console.log(error);
+            })
+            .always(function () {
+                page.commands.closeLoading();
+            })
+    }
+
+
+    page.commands.renderDataReport = () => {
+        page.commands.renderReportOfDay();
+        page.commands.renderYear();
+        page.commands.countOrderCurrentDay();
+        page.commands.renderReportCurrentMonth();
+        page.commands.renderTop5Product();
+    }
+
+    page.commands.showLoading = () => {
+        page.elements.loader.removeClass("hide");
+    }
+
+    page.commands.closeLoading = () => {
+        page.elements.loader.addClass("hide");
+    }
+
+    page.commands.loadData = () => {
+
+        page.commands.renderDataReport();
+
+        page.elements.dateStartReport.val(AppUtils.setCurrentDate());
+
+        page.elements.dateEndReport.val(AppUtils.setCurrentDate());
+
+        page.elements.dateStartReport.attr("max", AppUtils.getCurrentDay());
+
+        page.elements.dateEndReport.attr("max", AppUtils.getCurrentDay());
+
+
+    }
+
+
+    page.initializeEventControl = () => {
+        App.init();
+
+        page.elements.btnShowChartMonthOfYear.on("click", function () {
+            let year = page.elements.yearReport.val();
+            page.commands.showReportByYear(year);
+        });
+
+        page.elements.btnShowChartReportDayToDay.on("click", function () {
+            page.commands.handleShowReportDayToDay();
+        })
+
+        App.dashboard();
+
+    }
+
+    $(() => {
+
+        page.commands.loadData();
+        page.initializeEventControl();
+
+    });
+
+</script>
+
+</body>
+
+</html>

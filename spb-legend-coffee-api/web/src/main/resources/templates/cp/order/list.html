@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+
+    <th:block th:replace="/cp/layout/header :: header-utils"/>
+    <th:block th:replace="/cp/layout/header :: header-logo"/>
+    <th:block th:replace="/cp/layout/header :: header-perfect-scrollbar"/>
+    <th:block th:replace="/cp/layout/header :: header-material-design"/>
+    <th:block th:replace="/cp/layout/header :: header-app-css"/>
+    <th:block th:replace="/cp/layout/header :: header-app-style"/>
+    <th:block th:replace="/cp/layout/header :: header-loading"/>
+    <th:block th:replace="/cp/layout/header :: header-fontawesome"/>
+    <th:block th:replace="/cp/layout/header :: header-sweetalert2"/>
+    <th:block th:replace="/cp/layout/header :: header-izitoast"/>
+
+    <title>Legend Coffee</title>
+
+</head>
+
+<body>
+
+<div class="be-wrapper be-fixed-sidebar">
+
+    <th:block th:replace="/cp/layout/top-header :: top-header"></th:block>
+
+    <th:block th:replace="/cp/layout/left-sidebar :: left-sidebar"></th:block>
+
+    <div class="loader hide">
+        <div id="loading"></div>
+    </div>
+
+    <div class="be-content">
+        <div class="page-head">
+            <nav aria-label="breadcrumb" role="navigation">
+                <ol class="breadcrumb page-head-nav">
+                    <li class="breadcrumb-item"><a href="/cp">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="/cp/staffs">Nhân viên</a></li>
+                    <li class="breadcrumb-item active text-primary">Danh sách</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content container-fluid">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <div class="row d-flex justify-content-between">
+                            <div class="ml-3 title-table">DANH SÁCH HÓA ĐƠN</div>
+                            <div class="mr-2 d-flex">
+                                <div class="mr-2 form-label my-auto">
+                                    Từ
+                                </div>
+                                <div class="ml-2 mr-2">
+                                    <input type="date" min="2020-01-01" max="" class="form-control"
+                                           id='dayStartOrder'>
+                                </div>
+                                <div class="mr-2 form-label my-auto">
+                                    đến ngày
+                                </div>
+                                <div class="">
+                                    <input type="date" min="2020-01-01" max="" class="form-control"
+                                           id='dayEndOrder'>
+                                </div>
+                                <button id="btnViewOrder" class="btn btn-primary btn-lg ml-2">Xem danh sách
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-12">
+
+                        </div>
+                        <div class="table-responsive noSwipe col-12">
+                            <table id="tbOrder" class="table table-striped table-hover">
+                                <thead>
+                                <tr>
+                                    <th style="width:5%;" class="text-center">#</th>
+                                    <th style="width:25%;" class="text-center">Số bàn</th>
+                                    <th style="width:15%;" class="text-center">Thời gian</th>
+                                    <th style="width:25%;" class="text-center">Tên nhân viên</th>
+                                    <th style="width:10%;" class="text-center">Tổng tiền</th>
+                                    <th style="width:15%;" class="text-center">Trạng thái</th>
+                                    <th style="width:5%;" class="text-center"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="/cp/layout/right-sidebar :: right-sidebar"></th:block>
+
+</div>
+
+<th:block th:replace="/cp/layout/script :: script-jquery"/>
+<th:block th:replace="/cp/layout/script :: script-jquery-validate"/>
+<th:block th:replace="/cp/layout/script :: script-perfect-scrollbar"/>
+<th:block th:replace="/cp/layout/script :: script-boostrap"/>
+<th:block th:replace="/cp/layout/script :: script-app"/>
+<th:block th:replace="/cp/layout/script :: script-datatables-net"/>
+<th:block th:replace="/cp/layout/script :: script-fontawesome"/>
+<th:block th:replace="/cp/layout/script :: script-sweetalert2"/>
+<th:block th:replace="/cp/layout/script :: script-izitoast"/>
+<th:block th:replace="/cp/layout/script :: script-appUtils"/>
+
+<script>
+
+    const page = {
+        urls: {
+            getOrderFromDayToDay: AppUtils.ORDER_API,
+        },
+        elements: {},
+        commands: {},
+        initializeEventControl: {}
+    }
+
+    page.elements.loader = $(".loader");
+    page.elements.tbOrder = $("#tbOrder");
+    page.elements.tbOrderBody = $("#tbOrder tbody");
+
+    page.elements.dayStartOrder = $("#dayStartOrder");
+    page.elements.dayEndOrder = $("#dayEndOrder");
+    page.elements.btnViewOrder = $("#btnViewOrder");
+
+    page.commands.getOrderFromDayToDay = (startDay, endDay) => {
+        page.commands.showLoading();
+        page.elements.tbOrderBody.empty();
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getOrderFromDayToDay + `/day/${startDay}/${endDay}`
+        })
+            .done((data) => {
+                if (data === undefined) AppUtils.IziToast.showErrorAlertLeft("Không có dữ liệu! Vui lòng kiểm tra lại ngày bắt đầu và ngày kết thúc!")
+                else{
+                    data.map(item => {
+                        page.elements.tbOrderBody.prepend(page.commands.renderOrder(item));
+                    });
+                }
+            })
+            .fail((jqXHR) => {
+                AppUtils.SweetAlert.showError500();
+            })
+            .always(function () {
+            page.commands.closeLoading();
+        })
+    }
+
+    page.commands.renderOrder = (obj) => {
+
+        let strBtn;
+
+        obj.orderStatus == "PAID" ?
+            strBtn = `<button type="button" class="btn btn-rounded btn-space btn-success ">
+                        Đã thanh toán
+                       </button>` :
+            strBtn = `<button type="button" class="btn btn-rounded btn-space btn-warning ">
+                        Chưa thanh toán
+                       </button>`
+
+        return `
+          <tr id="tr_${obj.id}" class="primary">
+                    <td  class=" cell-detail user-infoali text-center ">
+                    ${obj.id}
+                    </td>
+
+                    <td class="cell-detail text-center">
+                        <p style="font-size: 16px" href="#">${obj.table.name} </p>
+                    </td>
+
+                     <td class="cell-detail text-center">
+                        <p style="font-size: 16px" href="#">${obj.createdAt} </p>
+                    </td>
+
+                    <td class="cell-detail text-center">${obj.staff.fullName}</td>
+
+                    <td class="cell-detail text-center">
+                        <p>${AppUtils.formatCurrency(obj.totalAmount)}</p>
+                    </td>
+
+                    <td class="text-center">
+
+                      ${strBtn}
+
+                    </td>
+
+                    <td>
+                    <a href="/cp/orders/${obj.id}"> <i class="fa-solid fa-eye "></i> </a>
+                    </td>
+                </tr>
+        `
+    }
+
+    page.commands.handleShowOrder = () => {
+        let startDay = page.elements.dayStartOrder.val();
+        let endDay = page.elements.dayEndOrder.val();
+
+        page.commands.getOrderFromDayToDay(startDay, endDay);
+    }
+
+    page.commands.showLoading = () => {
+        page.elements.loader.removeClass("hide");
+    }
+
+    page.commands.closeLoading = () => {
+        page.elements.loader.addClass("hide");
+    }
+
+    page.commands.renderDate = () => {
+
+        page.elements.dayStartOrder.val(AppUtils.setCurrentDate());
+
+        page.elements.dayEndOrder.val(AppUtils.setCurrentDate());
+
+        page.elements.dayStartOrder.attr("max", AppUtils.getCurrentDay());
+
+        page.elements.dayEndOrder.attr("max", AppUtils.getCurrentDay());
+
+    }
+
+
+    page.commands.loadData = () => {
+
+        page.commands.renderDate();
+    }
+
+    page.initializeEventControl = () => {
+        App.init();
+
+        page.elements.btnViewOrder.on("click", function () {
+            page.commands.handleShowOrder();
+        })
+    }
+
+    $(() => {
+        page.commands.loadData();
+
+        page.initializeEventControl();
+    });
+
+</script>
+</body>
+</html>

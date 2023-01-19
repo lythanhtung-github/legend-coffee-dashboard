@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+
+    <th:block th:replace="/cp/layout/header :: header-utils"/>
+    <th:block th:replace="/cp/layout/header :: header-logo"/>
+    <th:block th:replace="/cp/layout/header :: header-perfect-scrollbar"/>
+    <th:block th:replace="/cp/layout/header :: header-material-design"/>
+    <th:block th:replace="/cp/layout/header :: header-app-css"/>
+    <th:block th:replace="/cp/layout/header :: header-app-style"/>
+    <th:block th:replace="/cp/layout/header :: header-loading"/>
+    <th:block th:replace="/cp/layout/header :: header-fontawesome"/>
+    <th:block th:replace="/cp/layout/header :: header-sweetalert2"/>
+    <th:block th:replace="/cp/layout/header :: header-izitoast"/>
+
+    <title>Legend Coffee</title>
+
+</head>
+<body>
+
+<div class="be-wrapper">
+
+    <th:block th:replace="/cp/layout/top-header :: top-header"></th:block>
+
+    <th:block th:replace="/cp/layout/left-sidebar :: left-sidebar"></th:block>
+
+    <div class="loader hide">
+        <div id="loading"></div>
+    </div>
+
+    <div class="be-content">
+        <div class="page-head">
+            <nav aria-label="breadcrumb" role="navigation">
+                <ol class="breadcrumb page-head-nav">
+                    <li class="breadcrumb-item"><a href="/cp">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="/cp/staffs">Khách hàng</a></li>
+                    <li class="breadcrumb-item active text-primary">Thêm mới</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content container-fluid">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card card-border-color card-border-color-primary">
+                        <div class="card-header card-header-divider">Thêm mới khách hàng</div>
+                        <div class="card-body">
+                            <form id="frmCreateStaff">
+                                <div class="form-group">
+
+                                    <div class="frm-alert-danger hide">
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label for="fullNameCreateStaff">Họ tên</label>
+                                            <input class="form-control" type="text"
+                                                   placeholder="Nhập họ tên"
+                                                   id="fullNameCreateStaff" name="fullNameCreateStaff">
+                                        </div>
+                                        <div class="col-6">
+                                            <label >Số tiền</label>
+                                            <input type="numer" class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row mb-2">
+                                        <div class="col-6">
+                                            <label for="phoneCreateStaff">Số điện thoại</label>
+                                            <input class="form-control" type="text"
+                                                   placeholder="Nhập số điện thoại"
+                                                   id="phoneCreateStaff" name="phoneCreateStaff">
+                                        </div>
+                                        <div class="col-6">
+
+
+                                        </div>
+                                    </div>
+                                </div>
+<!--                                <div class="form-group">-->
+<!--                                    <div class="row mb-2">-->
+<!--                                        <div class="col-6">-->
+<!--                                            <label for="emailCreateStaff">Email</label>-->
+<!--                                            <input class="form-control" type="text"-->
+<!--                                                   placeholder="Nhập email"-->
+<!--                                                   id="emailCreateStaff" name="emailCreateStaff">-->
+<!--                                        </div>-->
+<!--                                        <div class="col-6">-->
+<!--                                            <label for="roleCreateStaff">Quyền</label>-->
+<!--                                            <select class="custom-select"-->
+<!--                                                    id="roleCreateStaff" name="roleCreateStaff">-->
+<!--                                            </select>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+                                <div class="form-group">
+                                    <div class="row mb-2">
+                                        <div class="col-6">
+                                            <label for="provinceCreateStaff">Tỉnh/Thành phố</label>
+                                            <select class="custom-select"
+                                                    id="provinceCreateStaff" name="provinceCreateStaff">
+                                            </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="districtCreateStaff">Quận/Huyện/Thị xã/Thành phố</label>
+                                            <select class="custom-select"
+                                                    id="districtCreateStaff" name="districtCreateStaff">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row mb-2">
+                                        <div class="col-6">
+                                            <label for="wardCreateStaff">Xã/Phường/Thị trấn</label>
+                                            <select class="custom-select"
+                                                    id="wardCreateStaff" name="wardCreateStaff">
+                                            </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="addressCreateStaff">Địa chỉ cụ thể</label>
+                                            <input class="form-control" type="text"
+                                                   placeholder="Nhập địa chỉ"
+                                                   id="addressCreateStaff" name="addressCreateStaff">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div>
+                                    <button class="btn btn-lg btn-success mr-2"
+                                            type="button"
+                                            id="btnCreateStaff">
+                                        <i class="fa-solid fa-plus"></i> Thêm mới
+                                    </button>
+                                    <a role="button" href="/cp/staffs" class="btn btn-lg btn-dark">Trở về</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card card-border-color card-border-color-primary">
+                        <div class="card-header card-header-divider">Hình ảnh</div>
+                        <div class="card-body col-12">
+                            <img class='mt-2 col-sm-12' role="button" style="cursor: pointer"
+                                 src='https://gcavocats.ca/wp-content/uploads/2018/09/man-avatar-icon-flat-vector-19152370-1.jpg'
+                                 alt="Hình ảnh sản phẩm"
+                                 id="imageCreateStaff"/>
+                            <input type="file" accept="image/*" id="fileImageCreateStaff" class="d-none"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="cp/layout/script :: script-jquery"/>
+<th:block th:replace="cp/layout/script :: script-jquery-validate"/>
+<th:block th:replace="cp/layout/script :: script-perfect-scrollbar"/>
+<th:block th:replace="cp/layout/script :: script-boostrap"/>
+<th:block th:replace="cp/layout/script :: script-app"/>
+<th:block th:replace="cp/layout/script :: script-fontawesome"/>
+<th:block th:replace="cp/layout/script :: script-sweetalert2"/>
+<th:block th:replace="cp/layout/script :: script-izitoast"/>
+<th:block th:replace="cp/layout/script :: script-appUtils"/>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        App.init();
+        App.pageProfile();
+    });
+</script>
+</body>
+</html>

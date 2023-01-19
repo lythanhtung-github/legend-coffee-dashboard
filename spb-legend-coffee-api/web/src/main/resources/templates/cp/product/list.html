@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+
+    <th:block th:replace="/cp/layout/header :: header-utils"/>
+    <th:block th:replace="/cp/layout/header :: header-logo"/>
+    <th:block th:replace="/cp/layout/header :: header-perfect-scrollbar"/>
+    <th:block th:replace="/cp/layout/header :: header-material-design"/>
+    <th:block th:replace="/cp/layout/header :: header-datatables-net-bs4"/>
+    <th:block th:replace="/cp/layout/header :: header-datatables-net-responsive-bs4"/>
+    <th:block th:replace="/cp/layout/header :: header-app-css"/>
+    <th:block th:replace="/cp/layout/header :: header-app-style"/>
+    <th:block th:replace="/cp/layout/header :: header-loading"/>
+    <th:block th:replace="/cp/layout/header :: header-fontawesome"/>
+    <th:block th:replace="/cp/layout/header :: header-sweetalert2"/>
+    <th:block th:replace="/cp/layout/header :: header-izitoast"/>
+
+    <title>Legend Coffee</title>
+
+</head>
+
+<body>
+<div class="be-wrapper">
+
+    <th:block th:replace="/cp/layout/top-header :: top-header"/>
+
+    <th:block th:replace="/cp/layout/left-sidebar :: left-sidebar"/>
+
+    <th:block th:replace="/cp/product/modalEdit :: modalEdit"/>
+
+    <div class="loader hide">
+        <div id="loading"></div>
+    </div>
+
+    <div class="be-content">
+        <div class="page-head">
+            <nav aria-label="breadcrumb" role="navigation">
+                <ol class="breadcrumb page-head-nav">
+                    <li class="breadcrumb-item"><a href="/cp">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="/cp/products">Sản phẩm</a></li>
+                    <li class="breadcrumb-item active text-primary">Danh sách</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card card-table">
+                        <div class="card-header">
+                            <div class="row d-flex justify-content-between">
+                                <div class="row-6 ml-3 title-table">DANH SÁCH SẢN PHẨM</div>
+                                <div class="row-6 mr-3">
+                                    <a id="ShowCreateProduct" class="btn btn-lg btn-success hide" href="/cp/products/create"><i
+                                            class="fa-solid fa-plus"></i> Thêm mới</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-striped table-hover table-fw-widget"
+                                   id="tbProduct">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th style="width:5%;">#</th>
+                                    <th style="width:15%;">Hình ảnh</th>
+                                    <th style="width:15%;">Sản phẩm</th>
+                                    <th style="width:10%;">Loại</th>
+                                    <th class="text-center" style="width:35%;">Tóm tắt</th>
+                                    <th class="text-center hide" id="actionProduct" style="width:20%;">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<th:block th:replace="/cp/layout/script :: script-jquery"/>
+<th:block th:replace="/cp/layout/script :: script-jquery-validate"/>
+<th:block th:replace="/cp/layout/script :: script-perfect-scrollbar"/>
+<th:block th:replace="/cp/layout/script :: script-boostrap"/>
+<th:block th:replace="/cp/layout/script :: script-app"/>
+<th:block th:replace="/cp/layout/script :: script-datatables-net"/>
+<th:block th:replace="/cp/layout/script :: script-fontawesome"/>
+<th:block th:replace="/cp/layout/script :: script-sweetalert2"/>
+<th:block th:replace="/cp/layout/script :: script-izitoast"/>
+<th:block th:replace="/cp/layout/script :: script-appUtils"/>
+
+<script type="text/javascript">
+
+    const page = {
+        urls: {
+            getAllProducts: AppUtils.PRODUCT_API,
+            getProductById: AppUtils.PRODUCT_API,
+            getAllCategory: AppUtils.CATEGORY_API,
+            editProduct: AppUtils.PRODUCT_API,
+            deleteProduct: AppUtils.PRODUCT_API + "/delete"
+        },
+        elements: {},
+        commands: {},
+        dialogs: {
+            elements: {},
+            loadData: {},
+            commands: {},
+            alertDanger: {}
+        },
+        initializeEventControl: {}
+    }
+
+    page.elements.loader = $(".loader");
+
+    page.elements.userLogin = $("#userLogin");
+    page.elements.actionProduct = $("#actionProduct");
+    page.elements.ShowCreateProduct = $("#ShowCreateProduct");
+    
+    
+    page.elements.tbProduct = $("#tbProduct");
+    page.elements.tbProductBody = $("#tbProduct tbody");
+
+
+
+    page.dialogs.elements.modalEdit = $("#modalEdit");
+    page.dialogs.elements.idEdit = $("#idEdit");
+    page.dialogs.elements.selectSizeEdit = $("#selectSizeEdit");
+    page.dialogs.elements.divNoSize = $("#divNoSize");
+    page.dialogs.elements.divAllSize = $("#divAllSize");
+    page.dialogs.elements.frmEdit = $("#frmEdit");
+    page.dialogs.elements.titleEdit = $("#titleEdit");
+    page.dialogs.elements.categoryEdit = $("#categoryEdit");
+
+    page.dialogs.elements.noSizeEdit = $("#noSizeEdit");
+    page.dialogs.elements.sSizeEdit = $("#sSizeEdit");
+    page.dialogs.elements.mSizeEdit = $("#mSizeEdit");
+    page.dialogs.elements.lSizeEdit = $("#lSizeEdit");
+
+    page.dialogs.elements.descriptionEdit = $("#descriptionEdit");
+    page.dialogs.elements.imageShowEdit = $("#imageShowEdit");
+    page.dialogs.elements.fileUploadImageEdit = $("#fileUploadImageEdit");
+    page.dialogs.elements.summaryEdit = $("#summaryEdit");
+
+    page.dialogs.elements.btnEdit = $("#btnEdit");
+
+    page.dialogs.alertDanger.frmEdit = $("#frmEdit .frm-alert-danger");
+
+
+    page.commands.getAllProducts = () => {
+        page.commands.showLoading();
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getAllProducts
+        })
+            .done((data) => {
+                $.each(data, (i, item) => {
+                    let product = item;
+                    let productImage = product.productImage;
+                    page.elements.tbProductBody.prepend(page.commands.renderProduct(product, productImage));
+                });
+
+                page.commands.removeHandleShowModal();
+
+                page.commands.handleShowGroupModal();
+            })
+            .fail((error) => {
+                console.log(error);
+            })
+            .always(function () {
+            page.commands.closeLoading();
+        })
+    }
+
+    page.commands.getAllCategory = () => {
+        return $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getAllCategory
+        })
+            .done((data) => {
+                data.map(item => {
+                    let str = `<option value="${item.id}">${item.title}</option>`;
+                    page.dialogs.elements.categoryEdit.append(str);
+                })
+            })
+            .fail((error) => {
+                AppUtils.IziToast.showErrorAlertLeft("Lỗi hệ thống! Vui lòng thử lại sau!")
+            })
+    }
+
+    page.commands.getProductById = (productId) => {
+        return $.ajax({
+            type: "GET",
+            url: page.urls.getProductById + "/" + productId
+        }).done((data) => {
+        })
+            .fail((jqXHR) => {
+                let errors = jqXHR.responseJSON;
+                if (errors) {
+                    let str = "";
+                    $.each(errors, (k, v) => {
+                        str += `
+                            ${v}
+                        `;
+                    })
+                    AppUtils.SweetAlert.showErrorAlert(str);
+                }
+            })
+    }
+
+    page.commands.renderProduct = (product, productImage) => {
+        let image_thumbnail = AppUtils.BASE_URL_CLOUD_IMAGE + "/" + AppUtils.SCALE_IMAGE_W60_H50_Q100 + "/" + productImage.fileFolder + "/" + productImage.fileName;
+        let userLoginRole = page.elements.userLogin.data("user-login-role");
+        let str = "";
+        if (userLoginRole == "ADMIN") {
+            page.elements.ShowCreateProduct.addClass("show");
+            page.elements.actionProduct.removeClass("hide");
+            str = `
+                <tr id="tr_${product.id}">
+                    <td>${product.id}</td>
+                    <td>
+                        <img src=${image_thumbnail} alt="${productImage.fileName}"/>
+                    </td>
+                    <td>
+                        <a href="/cp/products/${product.id}">${product.title}</a>
+                    </td>
+                    <td class="center">${product.category.title}</td>
+                    <td class="w-25">${product.summary}</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-lg btn-primary mr-2 edit"
+                          data-id="${product.id}"
+                          data-image-file-folder = "${productImage.fileFolder}"
+                          data-image-file-name = "${productImage.fileName}"
+                        >
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button type="button" class="btn btn-lg btn-danger delete"
+                            data-id="${product.id}"
+                        >
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `
+        } else {
+            str = `
+                 <tr id="tr_${product.id}">
+                    <td>${product.id}</td>
+                    <td>
+                        <img src=${image_thumbnail} alt="${productImage.fileName}"/>
+                    </td>
+                    <td>
+                        <a href="/cp/products/${product.id}">${product.title}</a>
+                    </td>
+                    <td class="center">${product.category.title}</td>
+                    <td class="w-25">${product.summary}</td>
+
+                </tr>
+            `
+        }
+            return str;
+    }
+
+
+    page.commands.handleShowEditModal = () => {
+        $(".edit").on("click", function () {
+
+            page.commands.showLoading();
+
+            let id = $(this).data("id");
+            let imageFileFolder = $(this).data("image-file-folder");
+            let imageFileName = $(this).data("image-file-name");
+
+            page.commands.getProductById(id).done((data) => {
+                let imageUrl = AppUtils.BASE_URL_CLOUD_IMAGE + "/" + AppUtils.SCALE_IMAGE_W250_H250_Q100 + "/" + imageFileFolder + "/" + imageFileName;
+                let product = data;
+                let sizes = product.sizes;
+
+                if (sizes.NO) {
+
+                    page.dialogs.elements.selectSizeEdit.val(0);
+                    page.dialogs.elements.noSizeEdit.val(sizes.NO.price);
+
+                } else {
+
+                    page.dialogs.elements.selectSizeEdit.val(1);
+                    if (sizes.S) page.dialogs.elements.sSizeEdit.val(sizes.S.price);
+                    if (sizes.M) page.dialogs.elements.mSizeEdit.val(sizes.M.price);
+                    if (sizes.L) page.dialogs.elements.lSizeEdit.val(sizes.L.price);
+
+                }
+                page.dialogs.commands.handleSelectSize();
+
+                page.dialogs.elements.idEdit.val(product.id);
+                page.dialogs.elements.titleEdit.val(product.title);
+                page.dialogs.elements.descriptionEdit.val(product.description);
+                page.dialogs.elements.summaryEdit.val(product.summary);
+                page.dialogs.elements.categoryEdit.val(product.category.id);
+                page.dialogs.elements.imageShowEdit.attr("src", imageUrl);
+
+                page.commands.closeLoading();
+
+                page.dialogs.elements.modalEdit.modal('show');
+            })
+        })
+    }
+
+    page.dialogs.elements.frmEdit.validate({
+        rules: {
+            titleEdit: {
+                required: true,
+                minlength: 5,
+                maxlength: 50
+            },
+            descriptionEdit: {
+                required: true,
+                minlength: 5,
+                maxlength: 500
+            }
+        },
+        messages: {
+            titleEdit: {
+                required: "Vui lòng nhập tên sản phẩm.",
+                minlength: "Tên sản phẩm có độ dài tối thiểu là ${0} ký tự.",
+                maxlength: "Tên sản phẩm có độ dài tối đa là ${0} ký tự."
+            },
+            descriptionEdit: {
+                required: "Vui lòng nhập mô tả sản phẩm.",
+                minlength: "Mô tả có độ dài tối thiểu là ${0} ký tự.",
+                maxlength: "Mô tả có độ dài tối đa là ${0} ký tự."
+            }
+        },
+        errorLabelContainer: "#frmEdit .frm-alert-danger",
+        errorPlacement: function (error) {
+            error.appendTo("#frmEdit .frm-alert-danger");
+        },
+        showErrors: function () {
+            if (this.numberOfInvalids() > 0) {
+                page.dialogs.alertDanger.frmEdit.removeClass("hide").addClass("show");
+            } else {
+                page.dialogs.alertDanger.frmEdit.removeClass("show").addClass("hide").empty();
+                $("#frmEdit input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        submitHandler: function () {
+
+            let id = page.dialogs.elements.idEdit.val();
+            let title = page.dialogs.elements.titleEdit.val().trim();
+            let description = page.dialogs.elements.descriptionEdit.val().trim();
+            let summary = page.dialogs.elements.summaryEdit.val().trim();
+            let categoryId = page.dialogs.elements.categoryEdit.val();
+            let file = page.dialogs.elements.fileUploadImageEdit[0].files[0];
+            let sizes = page.dialogs.commands.getSize();
+
+            if (sizes === "") {
+                let str = `<label class="error">Giá sản phẩm nằm trong khoảng 10.000 - 500.000 VNĐ</label>`;
+                page.dialogs.alertDanger.frmEdit.css("display", "block");
+                page.dialogs.alertDanger.frmEdit.append(str);
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append("id", id);
+            formData.append("title", title);
+            formData.append("description", description);
+            formData.append("summary", summary);
+            formData.append("categoryId", categoryId);
+            formData.append("file", file);
+            formData.append("sizes", sizes);
+
+            page.dialogs.commands.doEditProduct(formData, id);
+        }
+    });
+
+    page.dialogs.commands.doEditProduct = (formData, id) => {
+        page.commands.showLoading();
+        $.ajax({
+            type: "PATCH",
+            contentType: false,
+            cache: false,
+            processData: false,
+            url: page.urls.editProduct + "/" + id,
+            data: formData
+        })
+            .done((data) => {
+                let product = data;
+                let productImage = product.productImage;
+
+                let str = page.commands.renderProduct(product, productImage);
+                let updateRow = $("#tr_" + product.id);
+                updateRow.replaceWith(str);
+
+                page.commands.removeHandleShowModal();
+                page.commands.handleShowGroupModal();
+
+                page.dialogs.elements.modalEdit.modal("hide");
+
+                AppUtils.IziToast.showSuccessAlertLeft("Chỉnh sửa sản phẩm <b>'" + product.title + "'</b> thành công.")
+
+            }).fail((jqXHR) => {
+
+            let str = "";
+            console.log(jqXHR.status);
+            if (jqXHR.status === 401) {
+                AppUtils.SweetAlert.showError401();
+            } else {
+                if (jqXHR.status === 403) {
+
+                    AppUtils.SweetAlert.showError403();
+                } else {
+                    if (jqXHR.responseJSON) {
+                        if (jqXHR.responseJSON.message) {
+                            str += `<label id="message-error" class="error" for="message">${jqXHR.responseJSON.message}</label>`;
+                        } else {
+                            $.each(jqXHR.responseJSON, function (key, value) {
+                                str += `<label id="${key}-error" class="error" for="${key}>${value}</label>`;
+                                $("#" + key).addClass("error");
+                            });
+                        }
+                        page.dialogs.alertDanger.frmEdit.removeClass("hide").addClass("show");
+                        page.dialogs.alertDanger.frmEdit.css("display", "block")
+                        page.dialogs.alertDanger.frmEdit.append(str);
+                    } else {
+                        AppUtils.SweetAlert.showError500();
+                    }
+                }
+            }
+        }).always(function () {
+            page.commands.closeLoading();
+        })
+    }
+
+    page.commands.handleShowConfirmDelete = () => {
+        $(".delete").on("click", function () {
+            page.commands.showLoading();
+            let id = $(this).data("id");
+
+            page.commands.getProductById(id).then(() => {
+                page.commands.closeLoading();
+                Swal.fire({
+                    title: 'Bạn có chắc chắn không?',
+                    text: "Thao tác sẽ không thể hoàn tác",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Đồng ý!',
+                    cancelButtonText: 'Hủy',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        page.commands.doDeleteProduct(id)
+                    }
+                })
+            })
+        });
+    }
+
+    page.commands.doDeleteProduct = (productId) => {
+        page.commands.showLoading();
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "DELETE",
+            url: page.urls.deleteProduct + "/" + productId,
+            data: JSON.stringify(productId)
+        })
+            .done(() => {
+                $("#tr_" + productId).remove();
+                AppUtils.IziToast.showSuccessAlertLeft("Xóa thành công!");
+            })
+            .fail((jqXHR) => {
+                if (jqXHR.status === 401) {
+                    AppUtils.SweetAlert.showError401();
+                } else {
+                    if (jqXHR.status === 403) {
+                        AppUtils.SweetAlert.showError403();
+                    } else {
+                        if (jqXHR.responseJSON.message) {
+                            console.log(jqXHR.responseJSON.message)
+                            AppUtils.SweetAlert.showErrorAlert(jqXHR.responseJSON.message);
+                        } else {
+                            AppUtils.SweetAlert.showError500();
+                        }
+                    }
+                }
+            }).always(function () {
+            page.commands.closeLoading();
+        })
+    }
+
+    page.dialogs.commands.getSize = () => {
+
+        let noSize = page.dialogs.elements.noSizeEdit.val();
+        let sSize = page.dialogs.elements.sSizeEdit.val();
+        let mSize = page.dialogs.elements.mSizeEdit.val();
+        let lSize = page.dialogs.elements.lSizeEdit.val();
+        let sizeType = page.dialogs.elements.selectSizeEdit.val();
+        let sizes;
+
+        if (sizeType == 0) {
+            sizes = {
+                "NO": {"name": "NO", "price": noSize}
+            };
+        }
+        if (sizeType == 1) {
+
+            sSize ?
+                mSize ?
+                    lSize ?
+                        sizes = {
+                            "S": {"name": "S", "price": sSize},
+                            "M": {"name": "M", "price": mSize},
+                            "L": {"name": "L", "price": lSize}
+                        } :
+                        sizes = {
+                            "S": {"name": "S", "price": sSize},
+                            "M": {"name": "M", "price": mSize}
+                        } :
+                    lSize ?
+                        sizes = {
+                            "S": {"name": "S", "price": sSize},
+                            "L": {"name": "L", "price": lSize}
+                        } :
+                        sizes = {
+                            "S": {"name": "S", "price": sSize}
+                        } :
+                mSize ?
+                    lSize ?
+                        sizes = {
+                            "M": {"name": "M", "price": mSize},
+                            "L": {"name": "L", "price": lSize}
+                        } :
+                        sizes = {
+                            "M": {"name": "M", "price": mSize}
+                        } :
+                    lSize ?
+                        sizes = {
+                            "L": {"name": "L", "price": lSize}
+                        } :
+                        sizes = {}
+        }
+
+        return JSON.stringify(sizes);
+    }
+
+
+    page.dialogs.commands.handleSelectSize = () => {
+
+        let sizeType = page.dialogs.elements.selectSizeEdit.val();
+
+        if (sizeType == 0) {
+            page.dialogs.elements.divNoSize.removeClass("hide");
+            page.dialogs.elements.divAllSize.addClass("hide");
+        }
+        if (sizeType == 1) {
+            page.dialogs.elements.divNoSize.addClass("hide");
+            page.dialogs.elements.divAllSize.removeClass("hide");
+        }
+    }
+
+    page.dialogs.commands.handleSelectImageEdit = () => {
+
+        let imageFile = page.dialogs.elements.fileUploadImageEdit[0].files[0];
+        let fakePhotoUrl = URL.createObjectURL(imageFile);
+        page.dialogs.elements.imageShowEdit.attr("src", fakePhotoUrl);
+
+    }
+
+    page.commands.showLoading = () => {
+        page.elements.loader.removeClass("hide");
+
+    }
+
+    page.commands.closeLoading = () => {
+        page.elements.loader.addClass("hide");
+
+    }
+
+    page.commands.handleShowGroupModal = () => {
+        page.commands.handleShowConfirmDelete();
+        page.commands.handleShowEditModal();
+    }
+
+    page.commands.removeHandleShowModal = () => {
+        $(".edit").off("click");
+        $(".delete").off("click");
+    }
+
+    page.dialogs.commands.handleCloseEditModal = () => {
+        page.dialogs.elements.frmEdit.find("input.error").removeClass("error");
+        page.dialogs.elements.frmEdit[0].reset();
+        page.dialogs.elements.frmEdit.validate().resetForm();
+        page.dialogs.elements.fileUploadImageEdit.val("");
+    }
+
+    page.commands.loadData = () => {
+        page.commands.getAllCategory();
+        page.commands.getAllProducts();
+    }
+
+    page.initializeEventControl = () => {
+
+        App.init();
+        App.dataTables();
+
+        page.dialogs.elements.selectSizeEdit.on("change", function () {
+            page.dialogs.commands.handleSelectSize();
+        });
+
+        page.commands.handleShowGroupModal();
+
+        page.dialogs.elements.modalEdit.on("hide.bs.modal", function () {
+            page.dialogs.commands.handleCloseEditModal();
+        });
+
+        page.dialogs.elements.imageShowEdit.on("click", function () {
+            page.dialogs.elements.fileUploadImageEdit.click();
+        })
+
+        page.dialogs.elements.fileUploadImageEdit.on("change", function () {
+            page.dialogs.commands.handleSelectImageEdit();
+        });
+
+        page.dialogs.elements.btnEdit.on("click", () => {
+            page.dialogs.elements.frmEdit.submit();
+        });
+
+    }
+
+    $(() => {
+        page.commands.loadData();
+        page.initializeEventControl();
+    });
+</script>
+</body>
+
+</html>

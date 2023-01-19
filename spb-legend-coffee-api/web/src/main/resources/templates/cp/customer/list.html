@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+
+    <th:block th:replace="/cp/layout/header :: header-utils"/>
+    <th:block th:replace="/cp/layout/header :: header-logo"/>
+    <th:block th:replace="/cp/layout/header :: header-perfect-scrollbar"/>
+    <th:block th:replace="/cp/layout/header :: header-material-design"/>
+    <th:block th:replace="/cp/layout/header :: header-app-css"/>
+    <th:block th:replace="/cp/layout/header :: header-app-style"/>
+    <th:block th:replace="/cp/layout/header :: header-loading"/>
+    <th:block th:replace="/cp/layout/header :: header-fontawesome"/>
+    <th:block th:replace="/cp/layout/header :: header-sweetalert2"/>
+    <th:block th:replace="/cp/layout/header :: header-izitoast"/>
+
+    <title>Legend Coffee</title>
+
+</head>
+
+<body>
+
+<div class="be-wrapper be-fixed-sidebar">
+
+    <th:block th:replace="/cp/layout/top-header :: top-header"></th:block>
+
+    <th:block th:replace="/cp/layout/left-sidebar :: left-sidebar"></th:block>
+
+    <th:block th:replace="/cp/staff/modalEdit :: modalEdit"/>
+
+    <div class="loader hide">
+        <div id="loading"></div>
+    </div>
+
+    <div class="be-content">
+        <div class="page-head">
+            <nav aria-label="breadcrumb" role="navigation">
+                <ol class="breadcrumb page-head-nav">
+                    <li class="breadcrumb-item"><a href="/cp">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="/cp/staffs">Nhân viên</a></li>
+                    <li class="breadcrumb-item active text-primary">Danh sách</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content container-fluid">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <div class="row d-flex justify-content-between">
+                            <div class="row-6 ml-3 title-table">DANH SÁCH KHÁCH HÀNG</div>
+                            <div class="row-6 mr-3">
+                                <a class="btn btn-lg btn-success" href="/cp/staffs/create"><i
+                                        class="fa-solid fa-plus"></i> Thêm mới</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive noSwipe">
+                            <table id="tbStaff" class="table table-striped table-hover">
+                                <thead>
+                                <tr>
+                                    <th style="width:10%;" class="text-center">#</th>
+                                    <th style="width:10%;" class="text-center">Họ và tên</th>
+                                    <th style="width:10%;" class="text-center">Số điện thoại</th>
+                                    <th style="width:30%;" class="text-center">Địa chỉ</th>
+                                    <th style="width:12%;" class="text-center">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr class="primary">
+                                    <td class="cell-detail text-center">1</td>
+
+                                    <td class="cell-detail text-center">
+                                        <a style="font-size: 16px" href="#">Nguyễn Sơn Tùng</a>
+                                    </td>
+
+                                    <td class="cell-detail text-center">0987654321</td>
+
+                                    <td class="cell-detail text-center">
+                                        <p>Cam Nghĩa, Cam Lộ, Quảng Trị</p>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-danger mr-1 delete" >
+                                            <i class="fa-solid fa-unlock-keyhole"></i>
+                                        </button>
+
+                                    </td>
+                                </tr>
+
+                                <tr class="primary">
+                                    <td class="cell-detail text-center">2</td>
+
+                                    <td class="cell-detail text-center">
+                                        <a style="font-size: 16px" href="#">Tuấn Hưng</a>
+                                    </td>
+
+                                    <td class="cell-detail text-center">0987654321</td>
+
+                                    <td class="cell-detail text-center">
+                                        <p>Cam Nghĩa, Cam Lộ, Quảng Trị</p>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-danger mr-1 delete" >
+                                            <i class="fa-solid fa-unlock-keyhole"></i>
+                                        </button>
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="/cp/layout/right-sidebar :: right-sidebar"></th:block>
+
+</div>
+
+<th:block th:replace="/cp/layout/script :: script-jquery"/>
+<th:block th:replace="/cp/layout/script :: script-jquery-validate"/>
+<th:block th:replace="/cp/layout/script :: script-perfect-scrollbar"/>
+<th:block th:replace="/cp/layout/script :: script-boostrap"/>
+<th:block th:replace="/cp/layout/script :: script-app"/>
+<th:block th:replace="/cp/layout/script :: script-datatables-net"/>
+<th:block th:replace="/cp/layout/script :: script-fontawesome"/>
+<th:block th:replace="/cp/layout/script :: script-sweetalert2"/>
+<th:block th:replace="/cp/layout/script :: script-izitoast"/>
+<th:block th:replace="/cp/layout/script :: script-appUtils"/>
+<script type="text/javascript">
+    $(document).ready(function () {
+        App.init();
+        App.pageProfile();
+    });
+</script>
+</body>
+
+
+</html>

@@ -1,0 +1,120 @@
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.frm-alert-danger {
+    padding: 10px 35px;
+    margin-bottom: 15px;
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}
+
+.frm-alert-danger label {
+    display: list-item;
+}
+
+label.error {
+    color: #842029;
+}
+
+div .size-view {
+    border: 1px solid black;
+    background: #111;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 20px;
+    height: 30px;
+    line-height: 26px;
+    margin: 5px 10px 5px 0;
+    text-align: center;
+    transition: .5s;
+    width: 40px;
+}
+
+div .size-view:hover {
+    background: #fff;
+    color: #111;
+}
+
+table th {
+    background-color: #39938d !important;
+    color: #fff;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+table thead th {
+    border: 0 solid #ddd;
+
+}
+
+.modal-header-create {
+    background-color: #49ab2b;
+    color: #fff;
+}
+
+.modal-header-update {
+    background-color: #30aaeb;
+    color: #fff;
+}
+
+
+.swal2-actions {
+    justify-content: center !important;
+}
+
+#modalEdit .modal-header {
+    background-color: #0277bd;
+    color: white;
+}
+
+
+
+#modalEdit .modal-header button {
+    color: white;
+}
+
+.title-table {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.radio-gender{
+    height: 25px;
+    width: 25px;
+    background: #2AA1C0;
+}
+
+
+@media (min-width: 900px) {
+    .modal-xl {
+        max-width: 900px;
+    }
+}
+
+.modal-content {
+     max-width: 900px;
+}
+
+#orderview {
+    background-color: #39938d !important;
+    color: #fff;
+    border: 1px solid #ddd;
+    text-align: center;
+    margin: 0;
+}
+
+#totalAmountOrder{
+    color: red;
+    font-size: 20px;
+}
+.fa-eye {
+    font-size: 25px;
+
+}

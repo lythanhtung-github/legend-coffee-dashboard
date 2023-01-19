@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <th:block th:replace="/cp/layout/header :: header-utils"/>
+    <th:block th:replace="/cp/layout/header :: header-logo"/>
+    <th:block th:replace="/cp/layout/header :: header-perfect-scrollbar"/>
+    <th:block th:replace="/cp/layout/header :: header-material-design"/>
+    <th:block th:replace="/cp/layout/header :: header-app-css"/>
+    <th:block th:replace="/cp/layout/header :: header-app-style"/>
+    <th:block th:replace="/cp/layout/header :: header-loading"/>
+    <th:block th:replace="/cp/layout/header :: header-fontawesome"/>
+    <th:block th:replace="/cp/layout/header :: header-sweetalert2"/>
+    <th:block th:replace="/cp/layout/header :: header-izitoast"/>
+    <title>Legend Coffee</title>
+
+</head>
+<body>
+<div class="be-wrapper">
+
+    <th:block th:replace="/cp/layout/top-header :: top-header"/>
+
+    <th:block th:replace="/cp/layout/left-sidebar :: left-sidebar"/>
+
+    <div class="loader hide">
+        <div id="loading"></div>
+    </div>
+
+    <div class="be-content">
+        <div class="main-content container-fluid">
+            <div class="user-profile">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="user-info-list card">
+                            <div class="card-header card-header-divider" id="orderview">
+                                Chi tiết hóa đơn
+                                <span class="card-subtitle"></span>
+                            </div>
+                            <div class="card-body">
+                                <table class=" no-border no-strip skills">
+                                    <tbody class="no-border-x no-border-y">
+                                    <tr>
+                                        <td class="icon"><span class="fa-solid fa-file-invoice"></span></td>
+                                        <td class="item">Mã đơn<span class="icon s7-portfolio"></span></td>
+                                        <td id="idOrder" class="font-weight-bold"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="icon"><span class="fa-solid fa-file-invoice"></span></td>
+                                        <td class="item">Thời gian<span class="icon s7-portfolio"></span></td>
+                                        <td id="createAtOrder" class="font-weight-bold"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="icon"><span class="fa-solid fa-user-tie"></span></td>
+                                        <td class="item">Nhân viên thực hiện<span class="icon s7-gift"></span></td>
+                                        <td id="staffOrder" class="font-weight-bold"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="icon"><span class="fa-solid fa-table"></span></td>
+                                        <td class="item">Bàn sử dụng<span class="icon s7-phone"></span></td>
+                                        <td id="tableOrder" class="font-weight-bold"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="icon"><span class="fa-solid fa-money-bill"></span></td>
+                                        <td class="item">Tổng tiền<span class="icon s7-map-marker"></span></td>
+                                        <td id="totalAmountOrder" class="font-weight-bold display-6"><strong></strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="icon"><span class="fa-solid fa-group-arrows-rotate"></span></td>
+                                        <td class="item">Trạng thái<span class="icon s7-global"></span></td>
+                                        <td id="statusOrder" class="font-weight-bold"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="widget widget-fullwidth widget-small">
+
+                            <div class="widget-chart-container">
+                                <table class="table table-striped table-hover table-fw-widget" id="tbOrderItems">
+                                    <thead>
+                                    <tr>
+                                        <th style="width:15%;" class="text-center"></th>
+                                        <th style="width:35%;" class="text-center">Tên sản phẩm</th>
+                                        <th class="text-center">Số lượng</th>
+                                        <th class="text-center">Kích cỡ</th>
+                                        <th class="text-center">Giá</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="/cp/layout/right-sidebar :: right-sidebar"/>
+</div>
+
+<th:block th:replace="/cp/layout/script :: script-jquery"/>
+<th:block th:replace="/cp/layout/script :: script-jquery-validate"/>
+<th:block th:replace="/cp/layout/script :: script-perfect-scrollbar"/>
+<th:block th:replace="/cp/layout/script :: script-boostrap"/>
+<th:block th:replace="/cp/layout/script :: script-app"/>
+<th:block th:replace="/cp/layout/script :: script-datatables-net"/>
+<th:block th:replace="/cp/layout/script :: script-fontawesome"/>
+<th:block th:replace="/cp/layout/script :: script-sweetalert2"/>
+<th:block th:replace="/cp/layout/script :: script-izitoast"/>
+<th:block th:replace="/cp/layout/script :: script-appUtils"/>
+
+<script type="text/javascript">
+
+
+    const page = {
+        urls: {
+            getOrderById: AppUtils.ORDER_API,
+            getOrderItemByOrderId: AppUtils.ORDERITEM_API
+        },
+        elements: {},
+        commands: {},
+        initializeEventControl: {}
+    }
+
+    page.elements.loader = $(".loader");
+
+    page.elements.imageProductOrder = $("#imageProductOrder");
+    page.elements.nameProductOrder = $("#nameProductOrder");
+    page.elements.quantityOrder = $("#quantityOrder");
+    page.elements.priceOrder = $("#priceOrder");
+
+
+    page.elements.idOrder = $("#idOrder");
+    page.elements.staffOrder = $("#staffOrder");
+    page.elements.tableOrder = $("#tableOrder");
+    page.elements.totalAmountOrder = $("#totalAmountOrder");
+    page.elements.statusOrder = $("#statusOrder");
+    page.elements.createAtOrder = $("#createAtOrder");
+
+    page.elements.tbOrderItems = $("#tbOrderItems");
+    page.elements.tbOrderItemsBody = $("#tbOrderItems tbody");
+
+    page.commands.getOrderById = () => {
+        page.commands.showLoading();
+
+        let tempArray = location.href.split("/");
+        let orderId = tempArray.at(-1);
+
+        return $.ajax({
+            type: "GET",
+            url: page.urls.getOrderById + "/" + orderId
+
+        }).done((data) => {
+            console.log(data);
+            page.elements.idOrder.text(data.id);
+            page.elements.createAtOrder.text(data.createdAt);
+            page.elements.staffOrder.text(data.staff.fullName);
+            page.elements.tableOrder.text(data.table.name);
+            page.elements.totalAmountOrder.text(AppUtils.formatCurrency(data.totalAmount));
+
+            data.orderStatus == "PAID" ?
+                page.elements.statusOrder.text("Đã thanh toán") :
+                page.elements.statusOrder.text("Chưa thanh toán");
+
+            page.commands.getOrderItemByOrderId(data.id);
+
+        })
+            .fail((jqXHR) => {
+                let errors = jqXHR.responseJSON;
+                if (errors) {
+                    let str = "";
+                    $.each(errors, (k, v) => {
+                        str += `
+                            ${v}
+                        `;
+                    })
+                    AppUtils.SweetAlert.showErrorAlert(str);
+                }
+            })
+    }
+
+
+    page.commands.getOrderItemByOrderId = (orderId) => {
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getOrderItemByOrderId + "?orderId=" + orderId
+        }).done((data) => {
+            if(data == undefined) AppUtils.IziToast.showErrorAlertLeft("Chi tiết đơn hàng trống!");
+            $.each(data, (i, item) => {
+                let image_thumbnail = AppUtils.BASE_URL_CLOUD_IMAGE + "/" + AppUtils.SCALE_IMAGE_W60_H50_Q100 + "/" + item.product.productImage.fileFolder + "/" + item.product.productImage.fileName;
+                let str = `
+                  <tr>
+                <td class="user-avatar text-center">
+                    <img
+                        src="${image_thumbnail}"
+                        alt="image"></td>
+                <td class="text-center">${item.product.title}</td>
+                <td class="text-center">${item.quantity}</td>
+                 <td class="text-center">${item.size}</td>
+                <td class="text-center">${AppUtils.formatCurrency(item.amount)}</td>
+            </tr>
+                `
+                page.elements.tbOrderItemsBody.append(str);
+            })
+        })
+            .fail((jqXHR) => {
+                let errors = jqXHR.responseJSON;
+                if (errors) {
+                    let str = "";
+                    $.each(errors, (k, v) => {
+                        str += `
+                        ${v}
+                    `;
+                    })
+                    AppUtils.SweetAlert.showErrorAlert(str);
+                }
+            })
+            .always(function () {
+            page.commands.closeLoading();
+        })
+    }
+
+    page.commands.showLoading = () => {
+        page.elements.loader.removeClass("hide");
+    }
+
+    page.commands.closeLoading = () => {
+        page.elements.loader.addClass("hide");
+    }
+
+    page.commands.loadData = () => {
+        page.commands.getOrderById();
+    }
+
+    page.initializeEventControl = () => {
+        App.init();
+        App.pageProfile();
+
+
+    }
+
+    $(() => {
+        page.commands.loadData();
+        page.initializeEventControl();
+    });
+
+</script>
+</body>
+</html>

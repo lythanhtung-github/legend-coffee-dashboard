@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+
+    <th:block th:replace="/cp/layout/header :: header-utils"/>
+    <th:block th:replace="/cp/layout/header :: header-logo"/>
+    <th:block th:replace="/cp/layout/header :: header-perfect-scrollbar"/>
+    <th:block th:replace="/cp/layout/header :: header-material-design"/>
+    <th:block th:replace="/cp/layout/header :: header-app-css"/>
+    <th:block th:replace="/cp/layout/header :: header-app-style"/>
+    <th:block th:replace="/cp/layout/header :: header-loading"/>
+    <th:block th:replace="/cp/layout/header :: header-fontawesome"/>
+    <th:block th:replace="/cp/layout/header :: header-sweetalert2"/>
+    <th:block th:replace="/cp/layout/header :: header-izitoast"/>
+
+    <title>Legend Coffee</title>
+
+</head>
+<body>
+
+<div class="be-wrapper">
+
+    <th:block th:replace="/cp/layout/top-header :: top-header"></th:block>
+
+    <th:block th:replace="/cp/layout/left-sidebar :: left-sidebar"></th:block>
+
+    <div class="loader hide">
+        <div id="loading"></div>
+    </div>
+
+    <div class="be-content">
+        <div class="page-head">
+            <nav aria-label="breadcrumb" role="navigation">
+                <ol class="breadcrumb page-head-nav">
+                    <li class="breadcrumb-item"><a href="/cp">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="/cp/products">Sản phẩm</a></li>
+                    <li class="breadcrumb-item active text-primary">Thêm mới</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content container-fluid">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card card-border-color card-border-color-primary">
+                        <div class="card-header card-header-divider">Thêm mới sản phẩm</div>
+                        <div class="card-body">
+                            <form id="frmCreateProduct">
+                                <div class="form-group">
+
+                                    <div class="frm-alert-danger hide">
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label for="title">Tên sản phẩm(*)</label>
+                                            <input class="form-control" type="text"
+                                                   placeholder="Nhập tên sản phẩm"
+                                                   id="title" name="title">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="category">Loại sản phẩm(*)</label>
+                                            <select class="custom-select"
+                                                    id="category" name="category">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="selectSize">Kích cỡ(*)</label>
+                                    <div class="row mb-2">
+                                        <div class="col-6">
+                                            <select class="custom-select" id="selectSize">
+                                                <option value="0" selected>Không</option>
+                                                <option value="1">Có</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group col-6" id="divNoSize">
+                                            <input type="number" class="form-control"
+                                                   placeholder="Nhập giá sản phẩm"
+                                                   id="noSize" name="noSize">
+                                        </div>
+                                    </div>
+
+                                    <div class="row hide" id="divAllSize">
+                                        <div class="input-group mb-3 col-4">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <span>S</span>
+                                                </div>
+                                            </div>
+                                            <input type="number" class="form-control"
+                                                   aria-label="Text input with checkbox"
+                                                   placeholder="Nhập giá..."
+                                                   id="sSize" name="sSize">
+                                        </div>
+
+                                        <div class="input-group mb-3 col-4">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <span>M</span>
+                                                </div>
+                                            </div>
+                                            <input type="number" class="form-control"
+                                                   aria-label="Text input with checkbox"
+                                                   placeholder="Nhập giá..."
+                                                   id="mSize" name="mSize">
+                                        </div>
+                                        <div class="input-group mb-3 col-4">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <span>L</span>
+                                                </div>
+                                            </div>
+                                            <input type="number" class="form-control"
+                                                   aria-label="Text input with checkbox"
+                                                   placeholder="Nhập giá..."
+                                                   id="lSize" name="lSize">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="summary">Tóm tắt sản phẩm</label>
+                                    <textarea class="form-control" rows="2"
+                                              placeholder="Nhập tóm tắt sản phẩm."
+                                              id="summary" name="summary"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description">Mô tả sản phẩm(*)</label>
+                                    <textarea class="form-control" rows="4"
+                                              placeholder="Nhập mô tả sản phẩm."
+                                              id="description" name="description"></textarea>
+                                </div>
+
+                                <div>
+                                    <button class="btn btn-lg btn-success mr-2"
+                                            type="button"
+                                            id="btnCreate">
+                                        <i class="fa-solid fa-plus"></i> Thêm mới
+                                    </button>
+                                    <a role="button" href="/cp/products" class="btn btn-lg btn-dark">Trở về</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card card-border-color card-border-color-primary">
+                        <div class="card-header card-header-divider">Hình ảnh</div>
+                        <div class="card-body col-12">
+                            <img class='mt-2 col-sm-12' role="button" style="cursor: pointer"
+                                 src='/assets/img/product/default_product_image.png'
+                                 alt="Hình ảnh sản phẩm"
+                                 id="imageShow"/>
+                            <input type="file" accept="image/*" id="fileUploadImage" class="d-none"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="cp/layout/script :: script-jquery"/>
+<th:block th:replace="cp/layout/script :: script-jquery-validate"/>
+<th:block th:replace="cp/layout/script :: script-perfect-scrollbar"/>
+<th:block th:replace="cp/layout/script :: script-boostrap"/>
+<th:block th:replace="cp/layout/script :: script-app"/>
+<th:block th:replace="cp/layout/script :: script-fontawesome"/>
+<th:block th:replace="cp/layout/script :: script-sweetalert2"/>
+<th:block th:replace="cp/layout/script :: script-izitoast"/>
+<th:block th:replace="cp/layout/script :: script-appUtils"/>
+
+<script>
+    const page = {
+        urls: {
+            getAllCategory: AppUtils.CATEGORY_API,
+            createProduct: AppUtils.PRODUCT_API
+        },
+        elements: {
+            alertDanger: {}
+        },
+        commands: {},
+        initializeEventControl: {}
+    }
+
+    page.elements.loader = $(".loader");
+
+    page.elements.frmCreateProduct = $("#frmCreateProduct");
+    page.elements.title = $("#title");
+    page.elements.category = $("#category");
+    page.elements.selectSize = $("#selectSize");
+    page.elements.divNoSize = $("#divNoSize");
+    page.elements.divAllSize = $("#divAllSize");
+    page.elements.noSize = $("#noSize");
+    page.elements.sSize = $("#sSize");
+    page.elements.mSize = $("#mSize");
+    page.elements.lSize = $("#lSize");
+    page.elements.description = $("#description");
+    page.elements.summary = $("#summary");
+    page.elements.fileUploadImage = $("#fileUploadImage");
+    page.elements.imageShow = $("#imageShow");
+    page.elements.btnCreate = $("#btnCreate");
+
+    page.elements.alertDanger.frmCreateProduct = $("#frmCreateProduct .frm-alert-danger");
+
+    page.commands.getAllCategory = () => {
+        return $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getAllCategory
+        })
+            .done((data) => {
+                data.map(item => {
+                    let str = `<option value="${item.id}">${item.title}</option>`;
+                    page.elements.category.append(str);
+                })
+            })
+            .fail((error) => {
+                AppUtils.IziToast.showErrorAlertLeft("Lỗi hệ thống! Vui lòng thử lại sau!")
+            })
+    }
+
+    page.elements.frmCreateProduct.validate({
+        rules: {
+            title: {
+                required: true,
+                minlength: 5,
+                maxlength: 50
+            },
+            description: {
+                required: true,
+                minlength: 5,
+                maxlength: 500
+            }
+        },
+        messages: {
+            title: {
+                required: "Vui lòng nhập tên sản phẩm.",
+                minlength: "Tên sản phẩm có độ dài tối thiểu là ${0} ký tự.",
+                maxlength: "Tên sản phẩm có độ dài tối đa là ${0} ký tự."
+            },
+            description: {
+                required: "Vui lòng nhập mô tả sản phẩm.",
+                minlength: "Mô tả có độ dài tối thiểu là ${0} ký tự.",
+                maxlength: "Mô tả có độ dài tối đa là ${0} ký tự."
+            }
+        },
+        errorLabelContainer: "#frmCreateProduct .frm-alert-danger",
+        errorPlacement: function (error) {
+            error.appendTo("#frmCreateProduct .frm-alert-danger");
+        },
+        showErrors: function () {
+            if (this.numberOfInvalids() > 0) {
+                page.elements.alertDanger.frmCreateProduct.removeClass("hide").addClass("show");
+            } else {
+                page.elements.alertDanger.frmCreateProduct.removeClass("show").addClass("hide").empty();
+                $("#frmCreateProduct input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        submitHandler: function () {
+            let title = page.elements.title.val().trim();
+            let description = page.elements.description.val().trim();
+            let summary = page.elements.summary.val().trim();
+            let categoryId = page.elements.category.val();
+            let file = page.elements.fileUploadImage[0].files[0];
+            let sizes = page.commands.getSize();
+
+            let formData = new FormData();
+            formData.append("title", title);
+            formData.append("description", description);
+            formData.append("summary", summary);
+            formData.append("categoryId", categoryId);
+            formData.append("file", file);
+            formData.append("sizes", sizes);
+
+            page.commands.createProduct(formData);
+        }
+    });
+
+    page.commands.createProduct = (formData) => {
+        page.commands.showLoading();
+        $.ajax({
+            type: "POST",
+            contentType: false,
+            cache: false,
+            processData: false,
+            url: page.urls.createProduct,
+            data: formData
+        })
+            .done((data) => {
+                page.elements.frmCreateProduct[0].reset();
+                page.commands.clearImageReview();
+                AppUtils.IziToast.showSuccessAlertLeft("Thêm mới sản phẩm <b>'" + data.title + "'</b> thành công.");
+            }).fail((jqXHR) => {
+            let str = ``;
+            if (jqXHR.status === 401) {
+                AppUtils.SweetAlert.showError401();
+            } else {
+                if (jqXHR.status === 403) {
+                    AppUtils.SweetAlert.showError403();
+                } else {
+                    if (jqXHR.responseJSON) {
+                        if (jqXHR.responseJSON.message) {
+                            str += `<label id="message-error" class="error" for="message">${jqXHR.responseJSON.message}</label>`;
+                        } else {
+                            $.each(jqXHR.responseJSON, function (key, value) {
+                                str += `<label id="${key}-error" class="error" for="${key}">${value}</label>`;
+                                $("#" + key).addClass("error");
+                            });
+                        }
+                        page.elements.alertDanger.frmCreateProduct.removeClass("hide").addClass("show");
+                        page.elements.alertDanger.frmCreateProduct.css("display", "block");
+                        page.elements.alertDanger.frmCreateProduct.append(str);
+                    } else {
+                        AppUtils.SweetAlert.showError500();
+                    }
+                }
+            }
+        }).always(function () {
+            page.commands.closeLoading();
+        })
+    }
+
+    page.commands.getSize = () => {
+
+        let noSize = page.elements.noSize.val();
+        let sSize = page.elements.sSize.val();
+        let mSize = page.elements.mSize.val();
+        let lSize = page.elements.lSize.val();
+        let sizeType = page.elements.selectSize.val();
+        let sizes;
+
+        if (sizeType == 0) {
+            sizes = {
+                "NO": {"name": "NO", "price": noSize}
+            };
+        }
+        if (sizeType == 1) {
+
+            sSize ?
+                mSize ?
+                    lSize ?
+                        sizes = {
+                            "S": {"name": "S", "price": sSize},
+                            "M": {"name": "M", "price": mSize},
+                            "L": {"name": "L", "price": lSize}
+                        } :
+                        sizes = {
+                            "S": {"name": "S", "price": sSize},
+                            "M": {"name": "M", "price": mSize}
+                        } :
+                    lSize ?
+                        sizes = {
+                            "S": {"name": "S", "price": sSize},
+                            "L": {"name": "L", "price": lSize}
+                        } :
+                        sizes = {
+                            "S": {"name": "S", "price": sSize}
+                        } :
+                mSize ?
+                    lSize ?
+                        sizes = {
+                            "M": {"name": "M", "price": mSize},
+                            "L": {"name": "L", "price": lSize}
+                        } :
+                        sizes = {
+                            "M": {"name": "M", "price": mSize}
+                        } :
+                    lSize ?
+                        sizes = {
+                            "L": {"name": "L", "price": lSize}
+                        } :
+                        sizes = {}
+        }
+        return JSON.stringify(sizes);
+    }
+
+    page.commands.handleSelectSize = () => {
+
+        let sizeType = page.elements.selectSize.val();
+
+        if (sizeType == 0) {
+            page.elements.divNoSize.removeClass("hide");
+            page.elements.divAllSize.addClass("hide");
+        }
+        if (sizeType == 1) {
+            page.elements.divNoSize.addClass("hide");
+            page.elements.divAllSize.removeClass("hide");
+        }
+    }
+
+    page.commands.handleSelectImage = () => {
+
+        let imageFile = page.elements.fileUploadImage[0].files[0];
+        let fakePhotoUrl = URL.createObjectURL(imageFile);
+        page.elements.imageShow.attr("src", fakePhotoUrl);
+
+    }
+
+    page.commands.clearImageReview = () => {
+        page.elements.fileUploadImage.val("");
+        page.elements.imageShow.attr("src", '/assets/img/product/default_product_image.png');
+    }
+
+    page.commands.showLoading = () => {
+        page.elements.loader.removeClass("hide");
+        page.elements.btnCreate.prop('disabled', true);
+    }
+
+    page.commands.closeLoading = () => {
+        page.elements.loader.addClass("hide");
+        page.elements.btnCreate.prop('disabled', false);
+    }
+
+    page.commands.loadData = () => {
+
+        page.commands.getAllCategory();
+
+    }
+
+    page.initializeEventControl = () => {
+        App.init();
+
+        page.elements.selectSize.on("change", function () {
+            page.commands.handleSelectSize();
+        })
+
+        page.elements.imageShow.on("click", function () {
+            page.elements.fileUploadImage.click();
+        })
+
+        page.elements.fileUploadImage.on("change", function () {
+            page.commands.handleSelectImage();
+        });
+
+        page.elements.btnCreate.on("click", () => {
+            page.elements.frmCreateProduct.trigger("submit");
+        })
+
+    }
+
+    $(() => {
+        page.commands.loadData();
+        page.initializeEventControl();
+    });
+</script>
+</body>
+</html>

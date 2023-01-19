@@ -1,0 +1,93 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<th:block th:fragment="top-header">
+
+    <nav class="navbar navbar-expand fixed-top be-top-header">
+        <div class="container-fluid">
+            <div class="be-navbar-header"><a class="navbar-brand" href="/cp">
+                <img style="width: 130px;"
+                     src="/assets/img/logo-2.png" alt="">
+            </a>
+            </div>
+            <div class="page-title"><span>Trang chủ</span></div>
+            <div class="be-right-navbar">
+                <ul class="nav navbar-nav float-right be-user-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
+                           role="button" aria-expanded="false">
+                            <img th:src="${staff.staffAvatar.fileUrl}" alt="Avatar">
+                            <!--                            <span class="user-name" th:text="${staff.user.role.code}"></span>-->
+                        </a>
+                        <div class="dropdown-menu" role="menu">
+                            <div class="user-info">
+                                <div class="user-name" id="userLogin" th:text="${staff.fullName}"
+                                     th:data-user-login-role="${staff.user.role.code}"
+                                     th:data-user-login-id = " ${staff.id}">
+                            </div>
+                            <div class="user-position online">Đang hoạt động</div>
+                        </div>
+                        <a class="dropdown-item"
+                           th:href="@{'/cp/staffs/' + ${staff.id}}">
+                            <span class="icon mdi mdi-face"></span>Tài khoản
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <span class="icon mdi mdi-settings"></span>Cài đặt
+                        </a>
+                        <a class="dropdown-item" href="/cp/logout">
+                            <span class="icon mdi mdi-power"></span>Đăng xuất
+                        </a>
+            </div>
+            </li>
+            </ul>
+            <ul class="nav navbar-nav float-right be-icons-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link be-toggle-right-sidebar" href="#" role="button"
+                       aria-expanded="false">
+                        <span class="icon mdi mdi-settings"></span>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
+                       role="button" aria-expanded="false">
+                        <span class="icon mdi mdi-notifications"></span>
+                        <span class="indicator"></span>
+                    </a>
+                    <ul class="dropdown-menu be-notifications">
+                        <li>
+                            <div class="title">Thông báo
+                                <span class="badge badge-pill">3</span>
+                            </div>
+                            <div class="list">
+                                <div class="be-scroller-notifications">
+                                    <div class="content">
+                                        <ul>
+                                            <li class="notification notification-unread"><a href="#">
+                                                <div class="image">
+                                                    <img src="/assets/img/avatar2.png" alt="Avatar">
+                                                </div>
+                                                <div class="notification-info">
+                                                    <div class="text">
+                                                        <span class="user-name">Jessica Caruso</span>
+                                                        accepted your invitation
+                                                        to join the team.
+                                                    </div>
+                                                    <span class="date">2 min ago</span>
+                                                </div>
+                                            </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="footer">
+                                <a href="#">Xem tất cả thông báo</a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+
+</th:block>

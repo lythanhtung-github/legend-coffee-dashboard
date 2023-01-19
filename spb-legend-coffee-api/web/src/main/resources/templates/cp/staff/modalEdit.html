@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<th:block th:fragment="modalEdit">
+    <!-- Modal -->
+    <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fw-bold" id="modalEditLabel">Chỉnh sửa nhân viên</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="frmEditStaff">
+                        <div class="form-group">
+
+                            <div class="frm-alert-danger hide"></div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-8">
+
+                                    <input type="text" id="idEditStaff" name="idEditStaff" hidden>
+
+                                    <label for="fullNameEditStaff">Họ tên(*)</label>
+                                    <input class="form-control" type="text"
+                                           placeholder="Nhập họ tên nhân viên."
+                                           id="fullNameEditStaff" name="fullNameEditStaff">
+
+                                    <div class="row mt-2">
+
+                                        <div class="col-6">
+                                            <label for="dobEditStaff">Ngày sinh(*)</label>
+                                            <input type="date" class="form-control"
+                                                   min="1930-01-01" max=""
+                                                   id="dobEditStaff">
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label for="roleEditStaff">Quyền(*)</label>
+                                            <select class="custom-select"
+                                                    id="roleEditStaff" name="roleEditStaff">
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row mt-2">
+
+                                        <div class="col-6">
+                                            <label for="phoneEditStaff">Số điện thoại(*)</label>
+                                            <input class="form-control" type="text"
+                                                   placeholder="Nhập số điện thoại"
+                                                   id="phoneEditStaff" name="phoneEditStaff">
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label>Giới tính(*)</label>
+                                            <div class="d-flex">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input radio-gender" type="radio" name="gender" id="male" value="MALE">
+                                                    <label class="form-check-label" for="male">Nam</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input radio-gender" type="radio" name="gender" id="female" value="FEMALE">
+                                                    <label class="form-check-label" for="female">Nữ</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-4">
+
+                                    <img class='mt-2 col-sm-12' role="button" style="cursor: pointer"
+                                         src='/assets/img/user/default_user_image.jpg'
+                                         alt="Hình ảnh nhân viên"
+                                         id="imageShowEditStaff"/>
+                                    <input type="file" accept="image/*" id="fileUploadImageEditStaff" class="d-none"/>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-3">
+                                <label for="provinceEditStaff">Tỉnh/Thành phố(*)</label>
+                                <select class="custom-select"
+                                        id="provinceEditStaff" name="provinceEditStaff">
+                                </select>
+                            </div>
+
+                            <div class="col-3">
+                                <label for="districtEditStaff">Quận/Huyện/Thị xã/Thành phố(*)</label>
+                                <select class="custom-select"
+                                        id="districtEditStaff" name="districtEditStaff">
+                                </select>
+                            </div>
+
+                            <div class="col-3">
+                                <label for="wardEditStaff">Xã/Phường/Thị trấn(*)</label>
+                                <select class="custom-select"
+                                        id="wardEditStaff" name="wardEditStaff">
+                                </select>
+                            </div>
+
+                            <div class="col-3">
+                                <label for="addressEditStaff">Địa chỉ cụ thể(*)</label>
+                                <input class="form-control" type="text"
+                                       placeholder="Nhập địa chỉ"
+                                       id="addressEditStaff" name="addressEditStaff">
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark btn-lg" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary btn-lg"
+                            id="btnEditStaff">Chỉnh sửa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>

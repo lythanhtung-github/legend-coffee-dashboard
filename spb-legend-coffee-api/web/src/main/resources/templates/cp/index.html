@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+
+    <th:block th:replace="/cp/layout/header :: header-utils"></th:block>
+    <th:block th:replace="/cp/layout/header :: header-logo"></th:block>
+    <th:block th:replace="/cp/layout/header :: header-perfect-scrollbar"></th:block>
+    <th:block th:replace="/cp/layout/header :: header-material-design"></th:block>
+    <th:block th:replace="/cp/layout/header :: header-app-css"></th:block>
+    <th:block th:replace="/cp/layout/header :: header-fontawesome"></th:block>
+
+    <title>Legend Coffee</title>
+
+</head>
+
+<body>
+
+<div class="be-wrapper be-fixed-sidebar">
+
+    <th:block th:replace="/cp/layout/top-header :: top-header"></th:block>
+
+    <th:block th:replace="/cp/layout/left-sidebar :: left-sidebar"></th:block>
+
+    <div class="be-content">
+        <div class="main-content container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-6 col-xl-3">
+                    <div class="widget widget-tile">
+                        <div class="chart sparkline" id="spark1"></div>
+                        <div class="data-info">
+                            <div class="desc">Tổng số nhân viên</div>
+                            <div class="value">
+                                <span class="indicator indicator-equal mdi mdi-chevron-right"></span>
+                                <span class="number" data-toggle="counter" data-end="113">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 col-xl-3">
+                    <div class="widget widget-tile">
+                        <div class="chart sparkline" id="spark2"></div>
+                        <div class="data-info">
+                            <div class="desc">Tổng số đơn hàng</div>
+                            <div class="value">
+                                <span class="indicator indicator-positive mdi mdi-chevron-up"></span>
+                                <span class="number" data-toggle="counter" data-end="80" data-suffix="%">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 col-xl-3">
+                    <div class="widget widget-tile">
+                        <div class="chart sparkline" id="spark3"></div>
+                        <div class="data-info">
+                            <div class="desc">Tổng số khách hàng</div>
+                            <div class="value">
+                                <span class="indicator indicator-positive mdi mdi-chevron-up"></span>
+                                <span class="number" data-toggle="counter" data-end="532">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 col-xl-3">
+                    <div class="widget widget-tile">
+                        <div class="chart sparkline" id="spark4"></div>
+                        <div class="data-info">
+                            <div class="desc">Tổng số sản phẩm</div>
+                            <div class="value">
+                                <span class="indicator indicator-negative mdi mdi-chevron-down"></span>
+                                <span class="number" data-toggle="counter" data-end="113">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <th:block th:replace="/cp/layout/right-sidebar :: right-sidebar"></th:block>
+
+</div>
+<th:block th:replace="/cp/layout/script :: script-jquery"></th:block>
+<th:block th:replace="/cp/layout/script :: script-perfect-scrollbar"></th:block>
+<th:block th:replace="/cp/layout/script :: script-boostrap"></th:block>
+<th:block th:replace="/cp/layout/script :: script-app"></th:block>
+<th:block th:replace="/cp/layout/script :: script-jquery-sparkline"></th:block>
+<th:block th:replace="/cp/layout/script :: script-count-up"></th:block>
+<th:block th:replace="/cp/layout/script :: script-izitoast"></th:block>
+<th:block th:replace="/cp/layout/script :: script-sweetalert2"></th:block>
+<th:block th:replace="/cp/layout/script :: script-appUtils"></th:block>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        App.init();
+        App.dashboard();
+    });
+</script>
+</body>
+
+</html>

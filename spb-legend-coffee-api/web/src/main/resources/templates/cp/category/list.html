@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+
+    <th:block th:replace="/cp/layout/header :: header-utils"></th:block>
+    <th:block th:replace="/cp/layout/header :: header-logo"></th:block>
+    <th:block th:replace="/cp/layout/header :: header-perfect-scrollbar"></th:block>
+    <th:block th:replace="/cp/layout/header :: header-material-design"></th:block>
+    <th:block th:replace="/cp/layout/header :: header-app-css"></th:block>
+    <th:block th:replace="/cp/layout/header :: header-app-style"/>
+    <th:block th:replace="/cp/layout/header :: header-fontawesome"/>
+    <th:block th:replace="/cp/layout/header :: header-sweetalert2"/>
+    <th:block th:replace="/cp/layout/header :: header-izitoast"/>
+
+    <title>Legend Coffee</title>
+
+</head>
+
+<body>
+
+<div class="be-wrapper be-fixed-sidebar">
+
+    <th:block th:replace="/cp/layout/top-header :: top-header"></th:block>
+
+    <th:block th:replace="/cp/layout/left-sidebar :: left-sidebar"></th:block>
+
+    <!-- form edit modal-->
+    <th:block th:replace="cp/category/modalUpdateCategory :: modalUpdateCategory"></th:block>
+    <!-- form edit modal end-->
+
+    <!-- form create modal-->
+    <th:block th:replace="cp/category/modalCreateCategory :: modalCreateCategory"></th:block>
+    <!-- form create modal end-->
+
+
+    <div class="loader hide">
+        <div id="loading"></div>
+    </div>
+
+    <div class="be-content">
+        <div class="page-head">
+            <nav aria-label="breadcrumb" role="navigation">
+                <ol class="breadcrumb page-head-nav">
+                    <li class="breadcrumb-item"><a href="/cp">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="/cp/categories">Danh mục sản phẩm</a></li>
+                    <li class="breadcrumb-item active text-primary">Danh sách</li>
+                </ol>
+            </nav>
+        </div>
+
+
+        <div class="main-content container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card card-table">
+                        <div class="card-header">
+                            <div class="row d-flex justify-content-between">
+                                <div class="row-6 ml-3 title-table">DANH MỤC SẢN PHẨM</div>
+                                <div class="row-6 mr-3">
+                                    <button id="btnShowCreateModal"
+                                            data-target="#modalCreateCategory" data-toggle="modal"
+                                            class="btn btn-lg btn-success hide">
+                                        <i class="fa-solid fa-plus"></i> Thêm danh mục
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table id="tbCategory" class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Tên danh mục</th>
+                                    <th id="actionCategory" colspan="2" class="w-25 actions text-center hide">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <!--  Dữ liệu đổ vào-->
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <th:block th:replace="/cp/layout/right-sidebar :: right-sidebar"></th:block>
+
+</div>
+<th:block th:replace="cp/layout/script :: script-jquery"/>
+<th:block th:replace="cp/layout/script :: script-jquery-validate"/>
+<th:block th:replace="cp/layout/script :: script-perfect-scrollbar"/>
+<th:block th:replace="cp/layout/script :: script-boostrap"/>
+<th:block th:replace="cp/layout/script :: script-app"/>
+<th:block th:replace="cp/layout/script :: script-fontawesome"/>
+<th:block th:replace="cp/layout/script :: script-sweetalert2"/>
+<th:block th:replace="cp/layout/script :: script-izitoast"/>
+<th:block th:replace="cp/layout/script :: script-appUtils"/>
+<th:block th:replace="cp/layout/header :: header-loading"/>
+
+<script>
+
+    const page = {
+        urls: {
+            getAllCategory: AppUtils.CATEGORY_API,
+            createCategory: AppUtils.CATEGORY_API + "/create",
+            deleteCategory: AppUtils.CATEGORY_API + "/delete",
+            getCategoryById: AppUtils.CATEGORY_API,
+            updateCategory: AppUtils.CATEGORY_API + "/update"
+
+        },
+        elements: {},
+        loadData: {},
+        commands: {},
+        dialogs: {
+            elements: {},
+            loadData: {},
+            commands: {},
+            alertDanger: {}
+        },
+        initializeEventControl: {},
+    }
+
+    page.elements.loader = $(".loader");
+
+    page.elements.userLogin = $("#userLogin");
+    page.elements.actionCategory = $("#actionCategory");
+
+    page.elements.btnShowCreateModal = $("#btnShowCreateModal");
+    page.elements.tbCategory = $("#tbCategory");
+    page.elements.tbCategoryBody = $("#tbCategory tbody");
+
+    //create
+    page.dialogs.elements.modalCreateCategory = $("#modalCreateCategory");
+    page.dialogs.elements.frmCreateCategory = $("#frmCreateCategory");
+    page.dialogs.elements.nameCategoryCre = $("#nameCategoryCre");
+    page.dialogs.elements.btnCreate = $("#btnCreate");
+
+    // update
+    page.dialogs.elements.modalUpdateCategory = $("#modalUpdateCategory");
+    page.dialogs.elements.frmUpdateCategory = $("#frmUpdateCategory");
+    page.dialogs.elements.nameCategoryUp = $("#nameCategoryUp");
+    page.dialogs.elements.btnUpdate = $("#btnUpdate");
+    page.dialogs.elements.categoryIdUp = $("#categoryIdUp");
+
+    // //error
+    page.dialogs.alertDanger.modalCreateCategory = $("#modalCreateCategory .modal-body .frm-alert-danger");
+    page.dialogs.alertDanger.modalUpdateCategory = $("#modalUpdateCategory .modal-body .frm-alert-danger");
+
+    let category = new Category();
+
+    page.commands.getAllCategory = () => {
+        page.commands.showLoading();
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getAllCategory
+        })
+            .done((data) => {
+                data.map(item => {
+                    page.elements.tbCategoryBody.prepend(page.commands.renderCategory(item));
+                });
+                page.commands.removeHandleShowModal();
+                page.commands.handleShowGroupModal();
+
+            })
+            .fail((jqXHR) => {
+                AppUtils.SweetAlert.showError500();
+            }).always(function () {
+            page.commands.closeLoading();
+        })
+    }
+
+
+    page.commands.getCategoryById = (categoryId) => {
+
+        return $.ajax({
+            type: "GET",
+            url: page.urls.getCategoryById + "/" + categoryId
+        })
+            .done((data) => {
+                // category = data;
+            })
+            .fail((error) => {
+                console.error(error);
+            })
+    }
+
+
+    page.commands.renderCategory = (obj) => {
+
+        let userLoginRole = page.elements.userLogin.data("user-login-role");
+        let str = "";
+        if (userLoginRole == "ADMIN") {
+            page.elements.btnShowCreateModal.addClass("show");
+            page.elements.actionCategory.removeClass("hide");
+            str = `
+             <tr id="tr_${obj.id}">
+                    <td class="text-center">${obj.id}</td>
+                    <td class="text-center">${obj.title}</td>
+
+                    <td class="text-right">
+                        <button class="btn btn-primary mr-1 update" title="Sửa"
+                                data-toggle="modal" data-target="#updateModal" data-id="${obj.id}">
+                            <i class="fa-regular fa-pen-to-square " aria-hidden="true"></i>
+                        </button>
+                    </td>
+
+                    <td class="text-left">
+                        <button class="btn btn-danger delete"
+                                title="Suspend" data-id="${obj.id}">
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </button>
+
+                    </td>
+                </tr>
+            `
+        } else {
+            str = `
+                <tr id="tr_${obj.id}">
+                    <td class="text-center">${obj.id}</td>
+                    <td class="text-center">${obj.title}</td>
+
+                </tr>
+            `
+        }
+
+        return str;
+    }
+
+    //create//
+    page.commands.handleShowCreateModal = () => {
+        page.elements.btnShowCreateModal.on("click", () => {
+            page.dialogs.elements.modalCreateCategory.modal("show");
+        })
+    }
+
+    page.dialogs.elements.btnCreate.on("click", () => {
+        page.dialogs.elements.frmCreateCategory.trigger("submit");
+    });
+
+    page.dialogs.elements.frmCreateCategory.validate({
+        rules: {
+            nameCategoryCre: {
+                required: true,
+                minlength: 3,
+                maxlength: 30
+            }
+        },
+        messages: {
+            nameCategoryCre: {
+                required: "Vui lòng nhập tên danh mục",
+                minlength: "Độ dài tối thiểu là ${0} ký tự",
+                maxlength: "Độ dài tối đa là ${0} ký tự"
+            }
+        },
+        errorLabelContainer: "#modalCreateCategory .frm-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#modalCreateCategory .frm-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#modalCreateCategory .frm-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#modalCreateCategory .frm-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#frmCreateCategory input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        submitHandler: function () {
+            let category = {
+                title: page.dialogs.elements.nameCategoryCre.val(),
+            }
+            page.commands.createCategory(category);
+        }
+    });
+
+    page.commands.createCategory = (obj) => {
+
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "POST",
+            url: page.urls.createCategory,
+            data: JSON.stringify(obj)
+        })
+            .done((data) => {
+                let str = page.commands.renderCategory(data);
+                page.elements.tbCategoryBody.prepend(str);
+
+                page.commands.removeHandleShowModal();
+                page.commands.handleShowGroupModal();
+                page.dialogs.elements.modalCreateCategory.modal("hide");
+                AppUtils.IziToast.showSuccessAlertLeft("Thêm mới danh mục  <b>'" + data.title + "'</b> thành công.");
+
+            })
+            .fail((jqXHR) => {
+                let str = ``;
+                if (jqXHR.status === 401) {
+                    AppUtils.SweetAlert.showError401();
+                } else {
+                    if (jqXHR.status === 403) {
+                        AppUtils.SweetAlert.showError403();
+                    } else {
+                        if (jqXHR.responseJSON) {
+                            if (jqXHR.responseJSON.message) {
+                                str += `<label id="message-error" class="error" for="message">${jqXHR.responseJSON.message}</label>`;
+                            } else {
+                                $.each(jqXHR.responseJSON, function (key, value) {
+                                    str += `<label id="${key}-error" class="error" for="${key}">${value}</label>`;
+                                    $("#" + key).addClass("error");
+                                });
+                            }
+                            page.dialogs.alertDanger.modalCreateCategory.removeClass("hide").addClass("show");
+                            page.dialogs.alertDanger.modalCreateCategory.css("display", "block");
+                            page.dialogs.alertDanger.modalCreateCategory.append(str);
+                        } else {
+                            AppUtils.SweetAlert.showError500();
+                        }
+                    }
+                }
+            }).always(function () {
+            page.dialogs.elements.btnCreate.attr('disabled', false);
+        });
+    }
+
+    //end create//
+
+    // update //
+    page.dialogs.elements.btnUpdate.on("click", () => {
+        page.dialogs.elements.frmUpdateCategory.submit();
+    })
+
+    page.commands.handleShowUpdateModal = () => {
+        $(".update").on("click", function () {
+            page.commands.showLoading();
+            let id = $(this).data("id");
+            page.commands.getCategoryById(id).done((data) => {
+                page.dialogs.elements.categoryIdUp.val(id);
+                page.dialogs.elements.nameCategoryUp.val(data.title)
+
+                page.commands.closeLoading();
+                page.dialogs.elements.modalUpdateCategory.modal("show");
+            })
+                .catch(() => {
+                    AppUtils.SweetAlert.showError403();
+                });
+        })
+    }
+
+    page.dialogs.elements.frmUpdateCategory.validate({
+        rules: {
+            nameCategoryUp: {
+                required: true,
+                minlength: 3,
+                maxlength: 30
+            }
+        },
+        messages: {
+            nameCategoryUp: {
+                required: "Vui lòng không để trống tên danh mục",
+                minlength: "Độ dài tối thiểu là ${0} ký tự",
+                maxlength: "Độ dài tối đa là ${0} ký tự"
+            }
+        },
+        errorLabelContainer: "#modalUpdateCategory .frm-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#modalUpdateCategory .frm-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#modalUpdateCategory .frm-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#modalUpdateCategory .frm-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#frmUpdateCategory input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        submitHandler: function () {
+            category.id = page.dialogs.elements.categoryIdUp.val();
+            category.title = page.dialogs.elements.nameCategoryUp.val();
+            page.commands.doUpdateCategory(category);
+        }
+    })
+
+    page.commands.doUpdateCategory = (obj) => {
+        page.commands.showLoading();
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "PATCH",
+            url: page.urls.updateCategory + "/" + obj.id,
+            data: JSON.stringify(obj)
+        })
+            .done((data) => {
+                let str = page.commands.renderCategory(data);
+                let updateRow = $("#tr_" + data.id);
+                updateRow.replaceWith(str);
+
+
+                page.commands.removeHandleShowModal();
+                page.commands.handleShowGroupModal();
+
+                page.dialogs.elements.modalUpdateCategory.modal("hide");
+                AppUtils.IziToast.showSuccessAlertLeft("Chỉnh sửa thành công !!!")
+            })
+            .fail((jqXHR) => {
+                let str = ``;
+                if (jqXHR.status === 401) {
+                    AppUtils.SweetAlert.showError401();
+                } else {
+                    if (jqXHR.status === 403) {
+                        AppUtils.SweetAlert.showError403();
+                    } else {
+                        if (jqXHR.responseJSON) {
+                            if (jqXHR.responseJSON.message) {
+                                str += `<label id="message-error" class="error" for="message">${jqXHR.responseJSON.message}</label>`;
+                            } else {
+                                $.each(jqXHR.responseJSON, function (key, value) {
+                                    str += `<label id="${key}-error" class="error" for="${key}">${value}</label>`;
+                                    $("#" + key).addClass("error");
+                                });
+                            }
+                            page.dialogs.alertDanger.modalUpdateCategory.removeClass("hide").addClass("show");
+                            page.dialogs.alertDanger.modalUpdateCategory.css("display", "block");
+                            page.dialogs.alertDanger.modalUpdateCategory.append(str);
+                        } else {
+                            AppUtils.SweetAlert.showError500();
+                        }
+                    }
+                }
+            }).always(function () {
+            page.commands.closeLoading();
+            page.dialogs.elements.btnUpdate.attr('disabled', false);
+        });
+    }
+
+    //end update //
+
+    //delete table //
+
+    page.commands.deleteCategory = (obj) => {
+        page.commands.showLoading();
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "DELETE",
+            url: page.urls.deleteCategory + "/" + obj.id,
+            data: JSON.stringify(obj)
+        })
+            .done((data) => {
+
+                $("#tr_" + obj.id).empty()
+                AppUtils.IziToast.showSuccessAlertLeft("Xóa " + obj.title + " thành công !!!")
+
+            })
+            .fail((error) => {
+                if (error.status == 403) {
+                    AppUtils.IziToast.showErrorAlertRight("Xin lỗi, bạn không có quyền này!");
+                } else {
+                    AppUtils.SweetAlert.showError500();
+                }
+
+            }).always(function () {
+            page.commands.closeLoading();
+        })
+    }
+    page.commands.handleShowDeleteModal = () => {
+        $(".delete").on("click", function () {
+            page.commands.showLoading();
+            this.blur();
+            let id = $(this).data("id");
+
+            page.commands.getCategoryById(id).then((data) => {
+                page.commands.closeLoading();
+                Swal.fire({
+                    title: 'Bạn có chắc chắn?',
+                    text: "Xóa danh mục: " + data.title + " !!!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Đồng ý !',
+                    cancelButtonText: 'Hủy!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        data.deleted = 1;
+                        page.commands.deleteCategory(data);
+                    }
+                })
+            })
+                .catch(() => {
+                    AppUtils.SweetAlert.showError403();
+                });
+        })
+    }
+
+    //end delete //
+
+    // show group modal //
+    page.commands.handleShowGroupModal = () => {
+        page.commands.handleShowCreateModal();
+        page.commands.handleShowUpdateModal();
+        page.commands.handleShowDeleteModal();
+
+    }
+
+    page.commands.removeHandleShowModal = () => {
+        page.elements.btnShowCreateModal.off("click");
+        $(".update").off("click");
+        $(".delete").off("click");
+    }
+
+
+    page.dialogs.commands.handleCloseCreateModal = () => {
+        // page.dialogs.alertDanger.modalUpdateCategory.empty().removeClass("show").addClass("hide");
+        page.dialogs.elements.frmCreateCategory.find("input.error").removeClass("error");
+        page.dialogs.elements.frmCreateCategory[0].reset();
+        page.dialogs.elements.frmCreateCategory.validate().resetForm();
+    }
+
+    page.dialogs.commands.handleCloseUpdateModal = () => {
+        page.dialogs.elements.frmUpdateCategory.find("input.error").removeClass("error");
+        page.dialogs.elements.frmUpdateCategory[0].reset();
+        page.dialogs.elements.frmUpdateCategory.validate().resetForm();
+    }
+
+    page.commands.showLoading = () => {
+        page.elements.loader.removeClass("hide");
+
+    }
+
+    page.commands.closeLoading = () => {
+        page.elements.loader.addClass("hide");
+
+    }
+
+
+    page.commands.loadData = () => {
+        page.commands.getAllCategory();
+    }
+
+
+    page.initializeEventControl = () => {
+        App.init();
+
+        page.commands.handleShowGroupModal();
+
+        page.dialogs.elements.modalCreateCategory.on("hidden.bs.modal", function () {
+            page.dialogs.commands.handleCloseCreateModal();
+        });
+        page.dialogs.elements.modalUpdateCategory.on("hidden.bs.modal", function () {
+            page.dialogs.commands.handleCloseUpdateModal();
+        });
+
+
+    }
+
+    $(() => {
+        page.commands.loadData();
+
+        page.initializeEventControl();
+
+    });
+</script>
+</body>
+
+</html>

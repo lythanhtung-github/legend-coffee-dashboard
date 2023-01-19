@@ -1,0 +1,176 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+
+<th:block th:fragment="left-sidebar">
+
+  <div class="be-left-sidebar">
+    <div class="left-sidebar-wrapper"><a class="left-sidebar-toggle" href="/cp">Trang chủ</a>
+      <div class="left-sidebar-spacer">
+        <div class="left-sidebar-scroll">
+          <div class="left-sidebar-content">
+            <ul class="sidebar-elements">
+              <li class="divider">Danh mục</li>
+              <li class="active">
+                <a href="/cp">
+                  <i class="fa-solid icon fa-house"></i>
+                  <span>TRANG CHỦ</span>
+                </a>
+              </li>
+
+              <li class="parent">
+                <a href="#">
+                  <i class="fa-solid icon fa-mug-saucer"></i>
+                  <span>SẢN PHẨM</span>
+                </a>
+                <ul class="sub-menu">
+                  <th:block th:if="${staff.user.role.code == 'ADMIN'}">
+                  <li>
+                    <a href="/cp/products/create">
+                      <i class="icon fa-solid fa-plus"></i>
+                      Thêm mới
+                    </a>
+                  </li>
+                  </th:block>
+                  <li>
+                    <a href="/cp/products">
+                      <i class="fa-solid fa-list"></i>
+                      Danh sách sản phẩm
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cp/category">
+                      <i class="fa-regular fa-file-lines"></i>
+                      Danh mục sản phẩm
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+              <li class="parent">
+                <a href="#">
+                  <i class="icon fa-solid fa-table"></i>
+                  <span>QUẢN LÝ BÀN</span>
+                </a>
+                <ul class="sub-menu">
+                  <li>
+                    <a href="/cp/tables">
+                      <i class="fa-solid fa-list"></i>
+                      Danh sách bàn
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+              <li class="parent">
+                <a href="#">
+                  <i class="icon fa-solid fa-user-tie"></i>
+                  <span>NHÂN VIÊN</span>
+                </a>
+                <ul class="sub-menu">
+                  <th:block th:if="${staff.user.role.code == 'ADMIN'}">
+                    <li>
+                      <a href="/cp/staffs/create">
+                        <i class="fa-solid fa-user-plus"></i>
+                        Thêm mới
+                      </a>
+                    </li>
+                  </th:block>
+                  <li>
+                    <a href="/cp/staffs">
+                      <i class="fa-solid fa-users-rectangle"></i>
+                      Danh sách nhân viên
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+              <li class="parent">
+                <a href="#">
+                  <i class="icon fa-solid fa-users"></i>
+                  <span>KHÁCH HÀNG</span>
+                </a>
+                <ul class="sub-menu">
+                  <th:block th:if="${staff.user.role.code == 'ADMIN'}">
+                  <li>
+                    <a href="/cp/customers/create">
+                      <i class="fa-solid fa-user-plus"></i>
+                      Thêm mới
+                    </a>
+                  </li>
+                  </th:block>
+                  <li>
+                    <a href="/cp/customers">
+                      <i class="fa-solid fa-users-rectangle"></i>
+                      Danh sách khách hàng
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+              <th:block th:if="${staff.user.role.code == 'ADMIN'}">
+              <li class="parent">
+                <a href="#">
+                  <i class="icon fa-solid fa-gears"></i>
+                  <span>  TÀI KHOẢN</span>
+                </a>
+                <ul class="sub-menu">
+                  <li>
+                    <a href="/cp/staffs/account-recovery">
+                      <i class="fa-solid fa-unlock-keyhole"></i>
+                       Khôi phục tài khoản
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              </th:block>
+
+              <th:block th:if="${staff.user.role.code == 'ADMIN'}">
+              <li class="parent">
+                <a href="#">
+                  <i class="icon fa-solid fa-receipt"></i>
+                  <span>HÓA ĐƠN</span>
+                </a>
+                <ul class="sub-menu">
+                  <li>
+                    <a href="/cp/orders">
+                      <i class="fa-solid fa-list"></i>
+                      Danh sách hóa đơn
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              </th:block>
+
+              <th:block th:if="${staff.user.role.code == 'ADMIN'}">
+              <li class="parent">
+                <a href="#">
+                  <i class="icon fa-solid fa-chart-pie"></i>
+                  <span>THỐNG KÊ - BÁO CÁO</span>
+                </a>
+                <ul class="sub-menu">
+
+                  <li>
+                    <a href="/cp/report">
+                      <i class="fa-solid fa-chart-simple"></i>
+                      Doanh thu tổng
+                    </a>
+                  </li>
+
+                  <li>
+                    <a href="#">
+                      <i class="fa-solid fa-calendar-days"></i>
+                      Doanh thu ngày
+                    </a>
+                  </li>
+
+                </ul>
+              </li>
+              </th:block>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</th:block>
